@@ -19,10 +19,27 @@ public class Player : MonoBehaviour
     {
         HandleMovement();
 
-        HandleInteractions();
+        //HandleInteractions();
 
-        
-        
+
+    }
+
+    private void Start()
+    {
+        //listening for keypress
+        gameInput.OnInteractAction += GameInput_OnInteractAction;
+    }
+
+    //gets object interacted with and then calls that specific object interact method
+    private void GameInput_OnInteractAction(object sender, System.EventArgs e)
+    {
+
+        IInteractable interactable = GetInteractableObject();
+
+        if (interactable != null)
+        {
+            interactable.Interact(transform);
+        }
 
     }
 
@@ -101,33 +118,58 @@ public class Player : MonoBehaviour
 
     }
 
-    private void HandleInteractions()
+    /* private void HandleInteractions()
+     {
+         IInteractable interactable = GetInteractableObject();
+
+         if (interactable != null)
+         {
+             interactable.Interact(transform);
+         }
+
+
+     }*/
+
+
+    //gets the object interacted with and parses to GameInput_OnInteractAction
+    public IInteractable GetInteractableObject()
     {
+        IInteractable[] interactableObjects = new IInteractable[500];
 
-        Vector2 inputVector = gameInput.GetMovementVectorNormalized();
-        Vector3 moveDirection = new Vector3(inputVector.x, 0f, inputVector.y);
+        float interactRange = 1f;
 
-        float interactDistance = 2f;
+        Collider[] colliders = Physics.OverlapSphere(transform.position, interactRange);
 
-        if (moveDirection != Vector3.zero)
+        for (int i = 0; i < colliders.Length; i++)
         {
-            //this stores the last position before stopped moving
-            lastInteraction = moveDirection;
-        }
-
-        //out means the function is going to ouput/print smth
-        //Raycast - shoot a laser from this position to this pos to check if character is interacting with smth - 
-        if (Physics.Raycast(transform.position, lastInteraction, out RaycastHit raycastHit, interactDistance))
-        {
-            //return position of object hit
-            if (raycastHit.transform.TryGetComponent(out ClearCounter clearCounter))
+            if (colliders[i].TryGetComponent(out IInteractable interactable))
             {
-                //if the raycasthit detects counter - if player collided into counter
-                clearCounter.Interact();
+                interactableObjects[i] = interactable;  
             }
         }
+
+        //to prioritize closest object
+        IInteractable closestInteractable = null;
+
+        for (int i = 0; i < interactableObjects.Length; i++)
+        {
+            if (closestInteractable == null)
+            {
+                closestInteractable = interactableObjects[i];
+            }
+            else
+            {
+                //does a calc to see if previous or current object is closer to player 
+                //also note how it uses GetTransform from interface class pertaining to specific object
+                if (interactableObjects[i] != null && Vector3.Distance(transform.position, interactableObjects[i].GetTransform().position) < Vector3.Distance(transform.position, closestInteractable.GetTransform().position))
+                {
+                    closestInteractable = interactableObjects[i];
+                }
+
+            }
+
+        }
         
-
-
+        return closestInteractable;
     }
 }
