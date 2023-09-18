@@ -12,16 +12,14 @@ public class Player : MonoBehaviour
 
     private Vector3 lastInteraction;
 
-    [SerializeField] GameInput gameInput;   
+    [SerializeField] GameInput gameInput;
+
+    private ClearCounter selectedCounter;
 
     //runs every frame
     private void Update()
     {
         HandleMovement();
-
-        //HandleInteractions();
-
-
     }
 
     private void Start()
@@ -39,6 +37,7 @@ public class Player : MonoBehaviour
         if (interactable != null)
         {
             interactable.Interact(transform);
+            
         }
 
     }
@@ -118,17 +117,6 @@ public class Player : MonoBehaviour
 
     }
 
-    /* private void HandleInteractions()
-     {
-         IInteractable interactable = GetInteractableObject();
-
-         if (interactable != null)
-         {
-             interactable.Interact(transform);
-         }
-
-
-     }*/
 
 
     //gets the object interacted with and parses to GameInput_OnInteractAction
@@ -139,6 +127,7 @@ public class Player : MonoBehaviour
         float interactRange = 1f;
 
         Collider[] colliders = Physics.OverlapSphere(transform.position, interactRange);
+
 
         for (int i = 0; i < colliders.Length; i++)
         {
@@ -164,6 +153,7 @@ public class Player : MonoBehaviour
                 if (interactableObjects[i] != null && Vector3.Distance(transform.position, interactableObjects[i].GetTransform().position) < Vector3.Distance(transform.position, closestInteractable.GetTransform().position))
                 {
                     closestInteractable = interactableObjects[i];
+
                 }
 
             }
