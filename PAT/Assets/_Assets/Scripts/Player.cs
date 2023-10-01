@@ -12,20 +12,23 @@ public class Player : MonoBehaviour
 
     private Vector3 lastInteraction;
 
-    [SerializeField] GameInput gameInput;
+    [SerializeField] ClearCounter clearCounter;
 
-    private ClearCounter selectedCounter;
+    [SerializeField] GameInput gameInput;
 
     //runs every frame
     private void Update()
     {
         HandleMovement();
+       
     }
 
     private void Start()
     {
         //listening for keypress
+
         gameInput.OnInteractAction += GameInput_OnInteractAction;
+        
     }
 
     //gets object interacted with and then calls that specific object interact method
@@ -39,6 +42,15 @@ public class Player : MonoBehaviour
             interactable.Interact(transform);
             
         }
+        else if (interactable == null)
+        {
+            //might take this out
+            clearCounter.DisableOtherCounters();
+
+        }
+
+
+
 
     }
 

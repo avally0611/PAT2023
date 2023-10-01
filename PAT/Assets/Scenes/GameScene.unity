@@ -792,6 +792,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -4953522459515243317, guid: 47a52f2fbf6d5a646ba44084acffcfea,
+        type: 3}
+      propertyPath: tomatoPrefab
+      value: 
+      objectReference: {fileID: 8405463316643262841, guid: a18c9f67938644288819406388bc6db2,
+        type: 3}
+    - target: {fileID: -4953522459515243317, guid: 47a52f2fbf6d5a646ba44084acffcfea,
+        type: 3}
+      propertyPath: kitchenObjects
+      value: 
+      objectReference: {fileID: 11400000, guid: f2cf0c4854c39442f8080b62965a9ace,
+        type: 2}
     - target: {fileID: 3181108530964373562, guid: 47a52f2fbf6d5a646ba44084acffcfea,
         type: 3}
       propertyPath: m_IsActive
@@ -1013,6 +1025,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 7
+  clearCounter: {fileID: -4953522459515243317, guid: 47a52f2fbf6d5a646ba44084acffcfea,
+    type: 3}
   gameInput: {fileID: 957634048}
 --- !u!4 &1918496457
 Transform:
