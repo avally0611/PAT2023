@@ -2,25 +2,70 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ClearCounter : MonoBehaviour, IInteractable
+public class ClearCounter : MonoBehaviour, IInteractable, IKitchenObjectParent
 {
     
     [SerializeField] private GameObject Selected;
     [SerializeField] private KitchenObjects kitchenObjects;
     [SerializeField] private Transform counterTopPoint;
+    [SerializeField] private ClearCounter secondClearCounter;
+    [SerializeField] private bool testing;
+
+    private Player player;
+
+    private KitchenObjectManager kitchenObjectManager;
+
+    private void Update()
+    {
+        if (testing && Input.GetKeyDown(KeyCode.Escape))    
+        {
+            if (kitchenObjectManager != null)
+            {
+                kitchenObjectManager.SetKitchenObjectParent(secondClearCounter);
+                
+            }
+        }
+    }
+
+    public void SetPlayer(Player player)
+    {
+        this.player = player;
+        
+    }
+
+   
 
     public void Interact(Transform interactableObjectTransform)
     {
+        
         DisableOtherCounters();
         Selected.SetActive(true);
 
-        //clones specified object and retunrs at spec point
-        //placing the tomato at  local origin point - have  same position as  parent GameObject (in this case, counterTopPoint) because its local position relative to the parent is now zero
-        Transform kitchenObjTransform = Instantiate(kitchenObjects.prefab, counterTopPoint);
-        kitchenObjTransform.localPosition = Vector3.zero;
+        if (kitchenObjectManager == null)
+        {
+            //clones specified object and retunrs at spec point
+            Transform kitchenObjTransform = Instantiate(kitchenObjects.prefab, counterTopPoint);
+
+            //placing kitchen object on new counter
+            kitchenObjTransform.GetComponent<KitchenObjectManager>().SetKitchenObjectParent(this);
+
+            //move object relative to parent
+            kitchenObjTransform.localPosition = Vector3.zero;
+
+
+        }
+        else
+        {
+           
+            //give object to player
+            kitchenObjectManager.SetKitchenObjectParent(player);
+            
+        }
+        
 
 
     }
+
 
     public Transform GetTransform()
     {
@@ -41,6 +86,32 @@ public class ClearCounter : MonoBehaviour, IInteractable
 
         }
 
+    }
+
+    public Transform GetKitchenObjectFollowTransform()
+    {
+        //gets counter top point for attached counter
+        return counterTopPoint;
+    }
+
+    public void SetKitchenObject(KitchenObjectManager kitchenObjectManager)
+    {
+        this.kitchenObjectManager = kitchenObjectManager;
+    }
+
+    public KitchenObjectManager GetKitchenObject()
+    {
+        return kitchenObjectManager;
+    }
+
+    public void ClearKitchenObject()
+    {
+        kitchenObjectManager = null;
+    }
+
+    public bool HasKitchenObject()
+    {
+        return kitchenObjectManager != null; 
     }
 
 }

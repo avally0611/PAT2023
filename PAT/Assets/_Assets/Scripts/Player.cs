@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, IKitchenObjectParent
 
 {
     //show in the unity editor (serialized)
@@ -16,41 +16,56 @@ public class Player : MonoBehaviour
 
     [SerializeField] GameInput gameInput;
 
+    private KitchenObjectManager kitchenObjectManager;
+
+    [SerializeField] private Transform kitchenObjectHoldPoint;
+
+
+
+
+
     //runs every frame
     private void Update()
     {
         HandleMovement();
-       
+
+        
+
+        IInteractable interactable = GetInteractableObject();
+
+        if (interactable == null)
+        {
+    
+            clearCounter.DisableOtherCounters();
+
+        }
+
     }
 
     private void Start()
     {
-        //listening for keypress
-
+        //listening for keypress 
         gameInput.OnInteractAction += GameInput_OnInteractAction;
+        
         
     }
 
     //gets object interacted with and then calls that specific object interact method
     private void GameInput_OnInteractAction(object sender, System.EventArgs e)
     {
-
         IInteractable interactable = GetInteractableObject();
+
+        clearCounter.SetPlayer(this);
+
+
 
         if (interactable != null)
         {
+            
             interactable.Interact(transform);
             
         }
-        else if (interactable == null)
-        {
-            //might take this out
-            clearCounter.DisableOtherCounters();
-
-        }
-
-
-
+        
 
     }
 
@@ -173,5 +188,32 @@ public class Player : MonoBehaviour
         }
         
         return closestInteractable;
+    }
+
+
+    public Transform GetKitchenObjectFollowTransform()
+    {
+        //gets counter top point for attached counter
+        return kitchenObjectHoldPoint;
+    }
+
+    public void SetKitchenObject(KitchenObjectManager kitchenObjectManager)
+    {
+        this.kitchenObjectManager = kitchenObjectManager;
+    }
+
+    public KitchenObjectManager GetKitchenObject()
+    {
+        return kitchenObjectManager;
+    }
+
+    public void ClearKitchenObject()
+    {
+        kitchenObjectManager = null;
+    }
+
+    public bool HasKitchenObject()
+    {
+        return kitchenObjectManager != null;
     }
 }
