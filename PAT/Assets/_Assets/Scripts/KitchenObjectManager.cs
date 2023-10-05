@@ -13,6 +13,7 @@ public class KitchenObjectManager : MonoBehaviour
         return kitchenobject; 
     }
 
+    //basically responsible for moving the visual of object between player and counters
     public void SetKitchenObjectParent(IKitchenObjectParent kitchenObjectParent)
     {
         //clear previous/parent object

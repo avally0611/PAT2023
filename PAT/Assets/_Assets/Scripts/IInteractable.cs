@@ -6,7 +6,8 @@ public interface IInteractable
 {
     //so when you reference interface from any class, the class can use these methods
 
-    void Interact(Transform interactableObjectTransform);
+    void Interact(Player player);
+
 
     Transform GetTransform();
 }

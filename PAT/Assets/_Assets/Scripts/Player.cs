@@ -12,8 +12,6 @@ public class Player : MonoBehaviour, IKitchenObjectParent
 
     private Vector3 lastInteraction;
 
-    [SerializeField] ClearCounter clearCounter;
-
     [SerializeField] GameInput gameInput;
 
     private KitchenObjectManager kitchenObjectManager;
@@ -29,16 +27,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent
     {
         HandleMovement();
 
-        
-
-        IInteractable interactable = GetInteractableObject();
-
-        if (interactable == null)
-        {
-    
-            clearCounter.DisableOtherCounters();
-
-        }
+       
 
     }
 
@@ -55,19 +44,18 @@ public class Player : MonoBehaviour, IKitchenObjectParent
     {
         IInteractable interactable = GetInteractableObject();
 
-        clearCounter.SetPlayer(this);
-
-
 
         if (interactable != null)
         {
-            
-            interactable.Interact(transform);
-            
+
+            interactable.Interact(this);
+
         }
+    
         
 
     }
+
 
     public bool IsWalking()
     {
