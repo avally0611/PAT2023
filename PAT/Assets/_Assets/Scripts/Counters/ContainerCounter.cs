@@ -51,7 +51,7 @@ public class ContainerCounter : BaseCounter, IInteractable
         this.kitchenObjectManager = kitchenObjectManager;
     }
 
-    public KitchenObjectManager GetKitchenObject()
+    public KitchenObjectManager GetKitchenObjectManager()
     {
         return kitchenObjectManager;
     }

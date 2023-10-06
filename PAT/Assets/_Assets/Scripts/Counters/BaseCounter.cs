@@ -22,7 +22,7 @@ public class BaseCounter : MonoBehaviour, IKitchenObjectParent
         this.kitchenObjectManager = kitchenObjectManager;
     }
 
-    public KitchenObjectManager GetKitchenObject()
+    public KitchenObjectManager GetKitchenObjectManager()
     {
         return kitchenObjectManager;
     }

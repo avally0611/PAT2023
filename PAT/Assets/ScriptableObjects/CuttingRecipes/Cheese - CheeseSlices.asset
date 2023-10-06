@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a3025f13f97155458343ce0c9baec23, type: 3}
+  m_Name: Cheese - CheeseSlices
+  m_EditorClassIdentifier: 
+  input: {fileID: 11400000, guid: f2cf0c4854c39442f8080b62965a9ace, type: 2}
+  output: {fileID: 11400000, guid: 3fb2c4dd8fd43514595307425dd0e155, type: 2}
+  cuttingProgressMax: 4

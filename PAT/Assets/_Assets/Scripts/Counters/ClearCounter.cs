@@ -20,7 +20,7 @@ public class ClearCounter : BaseCounter, IInteractable
             //counter has no object
             if (player.HasKitchenObject())
             {
-                player.GetKitchenObject().SetKitchenObjectParent(this);
+                player.GetKitchenObjectManager().SetKitchenObjectParent(this);
             }
             else
             {
@@ -38,7 +38,7 @@ public class ClearCounter : BaseCounter, IInteractable
             else 
             {
                 //give to player
-                GetKitchenObject().SetKitchenObjectParent(player);
+                GetKitchenObjectManager().SetKitchenObjectParent(player);
             }
         }
 
@@ -52,37 +52,8 @@ public class ClearCounter : BaseCounter, IInteractable
         return transform;
     }
 
-    public void KitchenAction(Player player)
+    void IInteractable.KitchenAction(Player player)
     {
-        //
+       //nothing here
     }
-
-
-
-    /*public Transform GetKitchenObjectFollowTransform()
-    {
-        //gets counter top point for attached counter
-        return counterTopPoint;
-    }
-
-    public void SetKitchenObject(KitchenObjectManager kitchenObjectManager)
-    {
-        this.kitchenObjectManager = kitchenObjectManager;
-    }
-
-    public KitchenObjectManager GetKitchenObject()
-    {
-        return kitchenObjectManager;
-    }
-
-    public void ClearKitchenObject()
-    {
-        kitchenObjectManager = null;
-    }
-
-    public bool HasKitchenObject()
-    {
-        return kitchenObjectManager != null;
-    }*/
-
 }
