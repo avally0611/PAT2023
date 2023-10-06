@@ -17,5 +17,7 @@ public interface IKitchenObjectParent
 
     public bool HasKitchenObject();
 
+ 
+
 
 }

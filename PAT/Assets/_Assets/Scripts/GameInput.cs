@@ -6,6 +6,8 @@ using UnityEngine;
 public class GameInput : MonoBehaviour
 {
     public event EventHandler OnInteractAction;
+    public event EventHandler OnKitchenActionDone;
+
     private PlayerInputActions playerInputActions;
 
     private void Awake()
@@ -16,15 +18,18 @@ public class GameInput : MonoBehaviour
 
         //interact_performed listens for when E is pressed
         playerInputActions.Player.Interact.performed += Interact_performed;
+        playerInputActions.Player.KitchenAction.performed += KitchenAction_performed;                  
+    }
+
+    private void KitchenAction_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+    {
+        OnKitchenActionDone?.Invoke(this, EventArgs.Empty);
     }
 
     private void Interact_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
-        if (OnInteractAction != null)
-        {
-            OnInteractAction(this, EventArgs.Empty);
-        }
-        
+        OnInteractAction?.Invoke(this, EventArgs.Empty);
+
     }
 
     public Vector2 GetMovementVectorNormalized ()

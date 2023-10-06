@@ -8,6 +8,7 @@ public interface IInteractable
 
     void Interact(Player player);
 
+    void KitchenAction(Player player);
 
     Transform GetTransform();
 }

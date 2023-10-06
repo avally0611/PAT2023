@@ -52,6 +52,11 @@ public class ClearCounter : BaseCounter, IInteractable
         return transform;
     }
 
+    public void KitchenAction(Player player)
+    {
+        //
+    }
+
 
 
     /*public Transform GetKitchenObjectFollowTransform()

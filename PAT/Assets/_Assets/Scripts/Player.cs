@@ -35,8 +35,21 @@ public class Player : MonoBehaviour, IKitchenObjectParent
     {
         //listening for keypress 
         gameInput.OnInteractAction += GameInput_OnInteractAction;
+        gameInput.OnKitchenActionDone += GameInput_OnKitchenAction;
         
-        
+    }
+
+    private void GameInput_OnKitchenAction(object sender, System.EventArgs e)
+    {
+        IInteractable interactable = GetInteractableObject();
+
+
+        if (interactable != null)
+        {
+
+            interactable.KitchenAction(this);
+
+        }
     }
 
     //gets object interacted with and then calls that specific object interact method
@@ -90,7 +103,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent
 
             //attempt moving only on x axis (forward and back)
             Vector3 moveDirectionX = new Vector3(moveDirection.x, 0, 0).normalized;
-            canMove = !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerRadius, moveDirectionX, moveDistance);
+            canMove = moveDirection.x != 0 && !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerRadius, moveDirectionX, moveDistance);
 
             if (canMove)
             {
@@ -101,7 +114,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent
             {
                 //try move on z
                 Vector3 moveDirectionZ = new Vector3(0, 0, moveDirection.z).normalized;
-                canMove = !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerRadius, moveDirectionZ, moveDistance);
+                canMove = moveDirection.z != 0 && !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerRadius, moveDirectionZ, moveDistance);
 
                 if (canMove)
                 {

@@ -17,11 +17,7 @@ public class ContainerCounter : BaseCounter, IInteractable
     {
         if (!player.HasKitchenObject())
         {
-            //clones specified object and retunrs at spec point
-            Transform kitchenObjTransform = Instantiate(kitchenObjects.prefab);
-
-            //placing kitchen object in player hands
-            kitchenObjTransform.GetComponent<KitchenObjectManager>().SetKitchenObjectParent(player);
+            KitchenObjectManager.SpawnKitchenObject(kitchenObjects, player);
 
             OnPlayerGrabbedObject?.Invoke(this, EventArgs.Empty);
         }
@@ -36,6 +32,11 @@ public class ContainerCounter : BaseCounter, IInteractable
     public Transform GetTransform()
     {
         return transform;
+    }
+
+    public void KitchenAction(Player player)
+    {
+        //nothing needs to be done here
     }
 
 
