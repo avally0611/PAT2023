@@ -33,7 +33,17 @@ public class ClearCounter : BaseCounter, IInteractable
 
             if (player.HasKitchenObject())
             {
-                //do nothing
+                if (player.GetKitchenObjectManager() is PlateKitchenObject)
+                {
+                    PlateKitchenObject plateKitchenObject = player.GetKitchenObjectManager() as PlateKitchenObject;
+
+                    //might change this  - basically checks if you have only added one type of ingredieant
+                    if (plateKitchenObject.TryAddIngredient(GetKitchenObjectManager().GetKitchenObjects()))
+                    {
+                        GetKitchenObjectManager().DestroySelf();
+                    }
+                    
+                }
             }
             else 
             {
