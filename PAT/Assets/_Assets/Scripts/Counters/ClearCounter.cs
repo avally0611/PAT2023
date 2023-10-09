@@ -33,16 +33,25 @@ public class ClearCounter : BaseCounter, IInteractable
 
             if (player.HasKitchenObject())
             {
-                if (player.GetKitchenObjectManager() is PlateKitchenObject)
+                if (player.GetKitchenObjectManager().TryGetPlate(out PlateKitchenObject plateKitchenObject))
                 {
-                    PlateKitchenObject plateKitchenObject = player.GetKitchenObjectManager() as PlateKitchenObject;
 
                     //might change this  - basically checks if you have only added one type of ingredieant
                     if (plateKitchenObject.TryAddIngredient(GetKitchenObjectManager().GetKitchenObjects()))
                     {
                         GetKitchenObjectManager().DestroySelf();
                     }
-                    
+
+                }
+                else               
+                {
+                    //player not carrying plate but smth else while theres plate on counter
+                    if (GetKitchenObjectManager().TryGetPlate(out plateKitchenObject))
+                    {
+                        //counter holding player
+                        plateKitchenObject.TryAddIngredient(player.GetKitchenObjectManager().GetKitchenObjects());
+                        player.GetKitchenObjectManager().DestroySelf();
+                    }
                 }
             }
             else 

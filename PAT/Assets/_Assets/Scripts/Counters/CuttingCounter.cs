@@ -42,7 +42,16 @@ public class CuttingCounter : BaseCounter, IInteractable, IHasProgress
             //there is object on counter
             if (player.HasKitchenObject())
             {
-                //do nothing
+                if (player.GetKitchenObjectManager().TryGetPlate(out PlateKitchenObject plateKitchenObject))
+                {
+
+                    //might change this  - basically checks if you have only added one type of ingredieant
+                    if (plateKitchenObject.TryAddIngredient(GetKitchenObjectManager().GetKitchenObjects()))
+                    {
+                        GetKitchenObjectManager().DestroySelf();
+                    }
+
+                }
             }
             else
             {

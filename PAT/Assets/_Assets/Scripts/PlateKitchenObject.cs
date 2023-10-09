@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
@@ -7,6 +8,12 @@ using UnityEngine;
 //plate is a type of kitchen object - so behave like kitchen object but diff functions
 public class PlateKitchenObject : KitchenObjectManager
 {
+    public event EventHandler<OnIngredientAddedEventArgs> OnIngredientAdded;
+    public class OnIngredientAddedEventArgs : EventArgs
+    {
+        public KitchenObjects kitchenObjects;
+    }
+
     [SerializeField] private KitchenObjects[] validKitchenObjectsArr;
 
     private KitchenObjects[] kitchenObjectsArr;
@@ -34,8 +41,21 @@ public class PlateKitchenObject : KitchenObjectManager
         {
             kitchenObjectsArr[count] = kitchenObjects;
             count++;
+
+            OnIngredientAdded?.Invoke(this, new OnIngredientAddedEventArgs { kitchenObjects = kitchenObjects });
+
             return true;
         }
+    }
+
+    public KitchenObjects[] GetKitchenObjectsArr()
+    {
+        return kitchenObjectsArr;
+    }
+
+    public int GetArrCount()
+    {
+        return count;
     }
 
 

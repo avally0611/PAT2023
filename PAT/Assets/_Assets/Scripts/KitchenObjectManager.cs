@@ -50,6 +50,20 @@ public class KitchenObjectManager : MonoBehaviour
         Destroy(gameObject);
     }
 
+    public bool TryGetPlate(out PlateKitchenObject plateKitchenObject)
+    {
+        if (this is PlateKitchenObject)
+        {
+            plateKitchenObject = this as PlateKitchenObject;
+            return true;
+        }
+        else 
+        { 
+            plateKitchenObject= null;
+            return false; 
+        }
+    }
+
     public static KitchenObjectManager SpawnKitchenObject(KitchenObjects kitchenObjects, IKitchenObjectParent kitchenObjectParent)
     {
         Transform kitchenObjTransform = Instantiate(kitchenObjects.prefab);

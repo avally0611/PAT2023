@@ -135,7 +135,24 @@ public class StoveCounter : BaseCounter, IInteractable, IHasProgress
             //there is object on counter
             if (player.HasKitchenObject())
             {
-                //do nothing
+                if (player.GetKitchenObjectManager().TryGetPlate(out PlateKitchenObject plateKitchenObject))
+                {
+
+                    //might change this  - basically checks if you have only added one type of ingredieant
+                    if (plateKitchenObject.TryAddIngredient(GetKitchenObjectManager().GetKitchenObjects()))
+                    {
+                        GetKitchenObjectManager().DestroySelf();
+
+                        state = State.Idle;
+
+                        OnStateChanged?.Invoke(this, new OnStateChangedEventArgs { state = state });
+
+                        OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs { progressNormalised = 1f });
+
+                    }
+
+                }
+
             }
             else
             {
