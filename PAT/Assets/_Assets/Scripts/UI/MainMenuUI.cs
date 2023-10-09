@@ -13,11 +13,12 @@ public class MainMenuUI : MonoBehaviour
     {
         playButton.onClick.AddListener(PlayClick);
         quitButton.onClick.AddListener(QuitClick);
+        Time.timeScale = 1f;
     }
 
     private void PlayClick()
     {
-        SceneManager.LoadScene(1);
+        Loader.Load(Loader.Scene.GameScene);
     }
     private void QuitClick()
     {

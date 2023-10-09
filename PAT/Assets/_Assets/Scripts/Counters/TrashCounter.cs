@@ -8,6 +8,11 @@ public class TrashCounter : BaseCounter, IInteractable
 
     public static event EventHandler OnAnyObjectTrashed;
 
+    public new static void ResetStaticData()
+    {
+        OnAnyObjectTrashed = null;
+    }
+
     public void Interact(Player player)
     {
         if (player.HasKitchenObject())

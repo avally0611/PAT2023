@@ -18,6 +18,8 @@ public class DeliveryManager : MonoBehaviour
     private static RecipeSO[] waitingRecipeSOArr;
     private static int arrCount = 0;
 
+    
+
     [SerializeField] private RecipeListSO recipeListSO;
 
     private float spawnRecipeTimer;

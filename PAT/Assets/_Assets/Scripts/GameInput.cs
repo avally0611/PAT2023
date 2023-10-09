@@ -7,6 +7,7 @@ public class GameInput : MonoBehaviour
 {
     public event EventHandler OnInteractAction;
     public event EventHandler OnKitchenActionDone;
+    public event EventHandler OnPauseAction;
 
     private PlayerInputActions playerInputActions;
 
@@ -18,7 +19,22 @@ public class GameInput : MonoBehaviour
 
         //interact_performed listens for when E is pressed
         playerInputActions.Player.Interact.performed += Interact_performed;
-        playerInputActions.Player.KitchenAction.performed += KitchenAction_performed;                  
+        playerInputActions.Player.KitchenAction.performed += KitchenAction_performed;
+        playerInputActions.Player.Pause.performed += Pause_performed;
+    }
+
+    private void OnDestroy()
+    {
+        playerInputActions.Player.Interact.performed -= Interact_performed;
+        playerInputActions.Player.KitchenAction.performed -= KitchenAction_performed;
+        playerInputActions.Player.Pause.performed -= Pause_performed;
+
+        playerInputActions.Dispose();
+    }
+
+    private void Pause_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+    {
+       OnPauseAction?.Invoke(this, EventArgs.Empty);
     }
 
     private void KitchenAction_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)

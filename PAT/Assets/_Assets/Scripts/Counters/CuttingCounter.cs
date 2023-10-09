@@ -12,6 +12,11 @@ public class CuttingCounter : BaseCounter, IInteractable, IHasProgress
     //for cut sfx
     public static event EventHandler OnAnyCut;
 
+    public static new void ResetStaticData()
+    {
+        OnAnyCut = null;
+    }
+
     [SerializeField] private CuttingRecipeSO[] cuttingRecipeSOArray;
 
     private int cuttingProgress;
