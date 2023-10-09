@@ -44,8 +44,10 @@ public class DeliveryManagerUI : MonoBehaviour
 
         RecipeSO[] recipeSOArr = manager.GetWaitingRecipeSoArr();
 
+
         for (int i = 0; i < manager.GetArrCount(); i++)
         {
+            
             Transform recipeTransform = Instantiate(recipeTemplate, container);
             recipeTransform.gameObject.SetActive(true);
             recipeTransform.GetComponent<DeliveryManagerSingleUI>().SetRecipeSO(recipeSOArr[i]);

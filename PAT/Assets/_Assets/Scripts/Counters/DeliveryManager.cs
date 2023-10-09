@@ -6,13 +6,17 @@ using UnityEngine;
 
 public class DeliveryManager : MonoBehaviour
 {
+    [SerializeField] GameManager gameManager;
 
     public event EventHandler OnRecipeSpawned;
     public event EventHandler OnRecipeCompleted;
 
+    public event EventHandler OnRecipeSuccess;
+    public event EventHandler OnRecipeFailure;
+
     //spawn random list
-    private RecipeSO[] waitingRecipeSOArr;
-    private int arrCount;
+    private static RecipeSO[] waitingRecipeSOArr;
+    private static int arrCount = 0;
 
     [SerializeField] private RecipeListSO recipeListSO;
 
@@ -23,58 +27,62 @@ public class DeliveryManager : MonoBehaviour
 
     private void Awake()
     {
-        arrCount = 0;
+        
         waitingRecipeSOArr = new RecipeSO[10];
     }
 
     private void Update()
     {
-        //timer is counting down so when it reaches 0 & based on frame rate so it varies
-        spawnRecipeTimer -= Time.deltaTime;
-
-        if (spawnRecipeTimer <= 0f)
+        if (gameManager.IsGamePlaying())
         {
-            //resets countdown to zero
-            spawnRecipeTimer = spawnRecipeTimerMax;
+            //timer is counting down so when it reaches 0 & based on frame rate so it varies
+            spawnRecipeTimer -= Time.deltaTime;
 
-
-
-            RecipeSO[] listOfRecipeSO = recipeListSO.recipeSOArr;
-
-            if (arrCount < waitingRecipesMax)
+            if (spawnRecipeTimer <= 0f)
             {
-                //Range is for floating numbers, Next is for integers
-                RecipeSO waitingRecipeSO = listOfRecipeSO[UnityEngine.Random.Range(0, listOfRecipeSO.Length)];
-                waitingRecipeSOArr[arrCount] = waitingRecipeSO;
-                arrCount++;
-                Debug.Log(arrCount);
+                //resets countdown to zero
+                spawnRecipeTimer = spawnRecipeTimerMax;
 
-                OnRecipeSpawned?.Invoke(this, EventArgs.Empty);
+
+
+                RecipeSO[] listOfRecipeSO = recipeListSO.recipeSOArr;
+
+                if (arrCount < waitingRecipesMax)
+                {
+                    //Range is for floating numbers, Next is for integers
+                    RecipeSO waitingRecipeSO = listOfRecipeSO[UnityEngine.Random.Range(0, listOfRecipeSO.Length)];
+                    waitingRecipeSOArr[arrCount] = waitingRecipeSO;
+                    arrCount++;
+
+
+                    OnRecipeSpawned?.Invoke(this, EventArgs.Empty);
+                }
+
+
             }
-
-
         }
+        
     }
 
     //maybe add smth with regards to tips - if it fulfills first order - tip amount between 5-10?
     public void DeliverRecipe(PlateKitchenObject plateKitchenObject)
     {
-        Debug.Log(arrCount);
+        
         for (int i = 0; i < arrCount; i++)
         {
             RecipeSO waitingRecipeSO = waitingRecipeSOArr[i];
             
             //have same num of ingredients
-            if (waitingRecipeSO.kitchenObjectsArr.Length  == plateKitchenObject.GetKitchenObjectsArr().Length )
+            if (waitingRecipeSO.kitchenObjectsArr.Length  == plateKitchenObject.GetArrCount() )
             {
                 bool plateContentsMatchesRecipes = true;
-                Debug.Log("same num of ingredients");
+                
 
                 for (int j = 0; j < waitingRecipeSO.kitchenObjectsArr.Length; j++)
                 {
                     //going through all ingredients in the recipe
                     bool ingredientFound = false;
-                    for (int k = 0; k < plateKitchenObject.GetKitchenObjectsArr().Length; k++)
+                    for (int k = 0; k < plateKitchenObject.GetArrCount(); k++)
                     {
                         //going through all ingredients on plate
 
@@ -103,16 +111,20 @@ public class DeliveryManager : MonoBehaviour
 
                     //only way to reference a non static method (and this cant be using static context)
                     OnRecipeCompleted?.Invoke(this, new EventArgs());
-                    Debug.Log("recipe succesful");
                     
-             
+                    OnRecipeSuccess?.Invoke(this, new EventArgs());
+                    Debug.Log("success");
 
                     return;
                 }
+
             }
         }
-
         //no matches found - did not deliver correct recipe
+        Debug.Log("incorrect recipe");
+        OnRecipeFailure?.Invoke(this, new EventArgs());
+
+
     }
 
     private void Remove(int index)

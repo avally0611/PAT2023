@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,7 +19,9 @@ public class Player : MonoBehaviour, IKitchenObjectParent
 
     [SerializeField] private Transform kitchenObjectHoldPoint;
 
+    public event EventHandler OnPickedSomething;
 
+    [SerializeField] GameManager gameManager;
 
 
 
@@ -41,6 +44,10 @@ public class Player : MonoBehaviour, IKitchenObjectParent
 
     private void GameInput_OnKitchenAction(object sender, System.EventArgs e)
     {
+
+        if (!gameManager.IsGamePlaying())
+            return;
+
         IInteractable interactable = GetInteractableObject();
 
 
@@ -55,6 +62,9 @@ public class Player : MonoBehaviour, IKitchenObjectParent
     //gets object interacted with and then calls that specific object interact method
     private void GameInput_OnInteractAction(object sender, System.EventArgs e)
     {
+        if (!gameManager.IsGamePlaying())
+            return;
+
         IInteractable interactable = GetInteractableObject();
 
 
@@ -198,9 +208,15 @@ public class Player : MonoBehaviour, IKitchenObjectParent
         return kitchenObjectHoldPoint;
     }
 
+    //shows player picked up object
     public void SetKitchenObject(KitchenObjectManager kitchenObjectManager)
     {
         this.kitchenObjectManager = kitchenObjectManager;
+
+        if (kitchenObjectManager != null)
+        {
+            OnPickedSomething?.Invoke(this, EventArgs.Empty);
+        }
     }
 
     public KitchenObjectManager GetKitchenObjectManager()
