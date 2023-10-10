@@ -6,7 +6,7 @@ public class DeliveryCounter : BaseCounter, IInteractable
 {
     [SerializeField] DeliveryManager manager;
 
-    public void Interact(Player player)
+    public void InteractPrimary(Player player)
     {
         if (player.HasKitchenObject())
         {
@@ -21,7 +21,7 @@ public class DeliveryCounter : BaseCounter, IInteractable
         }
     }
 
-    public void KitchenAction(Player player)
+    public void InteractSecondary(Player player)
     {
        //nothing special here
     }

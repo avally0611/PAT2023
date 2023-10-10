@@ -21,7 +21,7 @@ public class CuttingCounter : BaseCounter, IInteractable, IHasProgress
 
     private int cuttingProgress;
 
-    public void Interact(Player player)
+    public void InteractPrimary(Player player)
     {
         if (!HasKitchenObject())
         {
@@ -70,7 +70,7 @@ public class CuttingCounter : BaseCounter, IInteractable, IHasProgress
 
     }
 
-    public void KitchenAction(Player player)
+    public void InteractSecondary(Player player)
     {
         //only cut if the counter has object and object on counter can be cut according to recipe
         if (HasKitchenObject() && HasRecipeWithInput(GetKitchenObjectManager().GetKitchenObjects()))

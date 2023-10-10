@@ -13,7 +13,7 @@ public class TrashCounter : BaseCounter, IInteractable
         OnAnyObjectTrashed = null;
     }
 
-    public void Interact(Player player)
+    public void InteractPrimary(Player player)
     {
         if (player.HasKitchenObject())
         {
@@ -23,7 +23,7 @@ public class TrashCounter : BaseCounter, IInteractable
         }
     }
 
-    public void KitchenAction(Player player)
+    public void InteractSecondary(Player player)
     {
         //no other specific action
     }

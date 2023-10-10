@@ -54,7 +54,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent
         if (interactable != null)
         {
 
-            interactable.KitchenAction(this);
+            interactable.InteractSecondary(this);
 
         }
     }
@@ -71,7 +71,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent
         if (interactable != null)
         {
 
-            interactable.Interact(this);
+            interactable.InteractPrimary(this);
 
         }
     

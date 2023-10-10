@@ -6,9 +6,9 @@ public interface IInteractable
 {
     //so when you reference interface from any class, the class can use these methods
 
-    void Interact(Player player);
+    void InteractPrimary(Player player);
 
-    void KitchenAction(Player player);
+    void InteractSecondary(Player player);
 
     Transform GetTransform();
 }

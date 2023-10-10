@@ -13,7 +13,7 @@ public class ContainerCounter : BaseCounter, IInteractable
     /*private KitchenObjectManager kitchenObjectManager;*/
 
 
-    public void Interact(Player player)
+    public void InteractPrimary(Player player)
     {
         if (!player.HasKitchenObject())
         {
@@ -34,7 +34,7 @@ public class ContainerCounter : BaseCounter, IInteractable
         return transform;
     }
 
-    public void KitchenAction(Player player)
+    public void InteractSecondary(Player player)
     {
         //nothing needs to be done here
     }

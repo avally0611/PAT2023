@@ -37,7 +37,7 @@ public class PlatesCounter : BaseCounter, IInteractable
     }
 
 
-    public void Interact(Player player)
+    public void InteractPrimary(Player player)
     {
         if (!player.HasKitchenObject())
         {
@@ -53,7 +53,7 @@ public class PlatesCounter : BaseCounter, IInteractable
         }
     }
 
-    public void KitchenAction(Player player)
+    public void InteractSecondary(Player player)
     {
         //nothing
     }

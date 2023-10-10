@@ -13,7 +13,7 @@ public class ClearCounter : BaseCounter, IInteractable
 
 
 
-    public void Interact(Player player)
+    public void InteractPrimary(Player player)
     {
         if (!HasKitchenObject())
         {
@@ -71,7 +71,7 @@ public class ClearCounter : BaseCounter, IInteractable
         return transform;
     }
 
-    void IInteractable.KitchenAction(Player player)
+    void IInteractable.InteractSecondary(Player player)
     {
        //nothing here
     }
