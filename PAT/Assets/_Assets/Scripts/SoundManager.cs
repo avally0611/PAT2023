@@ -10,6 +10,7 @@ public class SoundManager : MonoBehaviour
     [SerializeField] DeliveryCounter deliveryCounter;
     [SerializeField] Player player;
 
+    float volume;
 
 
     private void Start()
@@ -68,12 +69,22 @@ public class SoundManager : MonoBehaviour
 
     private void PlaySound(AudioClip[] audioClipArr, Vector3 position, float volume = 2f)
     {
-        PlaySound(audioClipArr[Random.Range(0, audioClipArr.Length)], position, volume);
+        PlaySound(audioClipArr[Random.Range(0, audioClipArr.Length)], position, this.volume);
         
     }
 
     public void PlayFootstepsSound(Vector3 position, float volume)
     {
         PlaySound(audioClipsRefSO.footStep, position, volume);
+    }
+
+    public void PlayWarningSound(Vector3 position)
+    {
+        PlaySound(audioClipsRefSO.warning, position);
+    }
+
+    public void ChangeVolume(float volume)
+    {
+        this.volume = volume * 0.01f;
     }
 }

@@ -23,9 +23,9 @@ public class DeliveryManager : MonoBehaviour
     [SerializeField] private RecipeListSO recipeListSO;
 
     private float spawnRecipeTimer;
-    private float spawnRecipeTimerMax = 4f;
+    private float spawnRecipeTimerMax = 2f;
 
-    private int waitingRecipesMax = 4;
+    private int waitingRecipesMax = 6;
 
     private void Awake()
     {
@@ -111,11 +111,11 @@ public class DeliveryManager : MonoBehaviour
 
                     Remove(i);
 
-                    //only way to reference a non static method (and this cant be using static context)
+                    
                     OnRecipeCompleted?.Invoke(this, new EventArgs());
                     
                     OnRecipeSuccess?.Invoke(this, new EventArgs());
-                    Debug.Log("success");
+                    
 
                     return;
                 }
