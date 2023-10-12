@@ -46,4 +46,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameManager: {fileID: 727328195585813824, guid: 044e3f53482a8e640b18d1f6ee37cd40,
     type: 3}
+  pointsUI: {fileID: 7397838060151415984, guid: 1d0e3a62d815845c5ad3c5672999e4fd,
+    type: 3}
   recipeListSO: {fileID: 11400000, guid: 4032ebe676c4ff94ca408546f8bf7d6d, type: 2}

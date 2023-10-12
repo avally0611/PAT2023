@@ -16,9 +16,13 @@ public class DeliveryManager : MonoBehaviour
 
     //spawn random list
     private static RecipeSO[] waitingRecipeSOArr;
-    private static int arrCount = 0;
+    private static int waitingRecipeArrCount = 0;
 
-    
+    //array that stores time of recipes 
+    private static DateTime[] startTimeArr;
+    private static int startTimeArrCount = 0;
+
+    [SerializeField] private PointsUI pointsUI;
 
     [SerializeField] private RecipeListSO recipeListSO;
 
@@ -29,8 +33,8 @@ public class DeliveryManager : MonoBehaviour
 
     private void Awake()
     {
-        
         waitingRecipeSOArr = new RecipeSO[10];
+        startTimeArr = new DateTime[10];
     }
 
     private void Update()
@@ -49,12 +53,16 @@ public class DeliveryManager : MonoBehaviour
 
                 RecipeSO[] listOfRecipeSO = recipeListSO.recipeSOArr;
 
-                if (arrCount < waitingRecipesMax)
+                if (waitingRecipeArrCount < waitingRecipesMax)
                 {
                     //Range is for floating numbers, Next is for integers
                     RecipeSO waitingRecipeSO = listOfRecipeSO[UnityEngine.Random.Range(0, listOfRecipeSO.Length)];
-                    waitingRecipeSOArr[arrCount] = waitingRecipeSO;
-                    arrCount++;
+
+                    waitingRecipeSOArr[waitingRecipeArrCount] = waitingRecipeSO;
+                    startTimeArr[startTimeArrCount] = DateTime.Now;
+
+                    startTimeArrCount++;
+                    waitingRecipeArrCount++;
 
 
                     OnRecipeSpawned?.Invoke(this, EventArgs.Empty);
@@ -69,58 +77,66 @@ public class DeliveryManager : MonoBehaviour
     //maybe add smth with regards to tips - if it fulfills first order - tip amount between 5-10?
     public void DeliverRecipe(PlateKitchenObject plateKitchenObject)
     {
-        
-        for (int i = 0; i < arrCount; i++)
+        DateTime placementTime = DateTime.Now;
+        int foundIndex = -1;
+
+        for (int i = 0; i < waitingRecipeArrCount; i++)
         {
             RecipeSO waitingRecipeSO = waitingRecipeSOArr[i];
             
-            //have same num of ingredients
-            if (waitingRecipeSO.kitchenObjectsArr.Length  == plateKitchenObject.GetArrCount() )
+            //have same num of ingredients - take it out
+            
+            foundIndex = i;
+
+            for (int j = 0; j < waitingRecipeSO.kitchenObjectsArr.Length; j++)
             {
-                bool plateContentsMatchesRecipes = true;
-                
-
-                for (int j = 0; j < waitingRecipeSO.kitchenObjectsArr.Length; j++)
+                //going through all ingredients in the recipe
+                bool ingredientFound = false;
+                    
+                for (int k = 0; k < plateKitchenObject.GetArrCount(); k++)
                 {
-                    //going through all ingredients in the recipe
-                    bool ingredientFound = false;
-                    for (int k = 0; k < plateKitchenObject.GetArrCount(); k++)
+                    //going through all ingredients on plate
+
+                    //check if so is passing reference/value
+                    if (waitingRecipeSO.kitchenObjectsArr[j].Equals(plateKitchenObject.GetKitchenObjectsArr()[k]))
                     {
-                        //going through all ingredients on plate
+                        //ingredient matches
+                        ingredientFound = true;
 
-
-                        if (waitingRecipeSO.kitchenObjectsArr[j] == plateKitchenObject.GetKitchenObjectsArr()[k])
-                        {
-                            //ingredient matches
-                            ingredientFound = true;
-
-                            //used when conditon is met early
-                            break;
-                        }
-                    }
-                    if (!ingredientFound)
-                    {
-                        //plate ingredients do not match recipe ingredients
-                        plateContentsMatchesRecipes = false;
+                        //used when conditon is met early
+                        break;
                     }
                 }
-
-                if (plateContentsMatchesRecipes)
+                if (!ingredientFound)
                 {
-                    //player delivered correct recipe
-
-                    Remove(i);
-
+                    //plate ingredients do not match recipe ingredients
                     
-                    OnRecipeCompleted?.Invoke(this, new EventArgs());
-                    
-                    OnRecipeSuccess?.Invoke(this, new EventArgs());
-                    
-
-                    return;
+                    foundIndex = -1;
+                    //if you dont find one ingredient, then dont look at another
+                    break;
                 }
-
             }
+
+            if (foundIndex >= 0)
+            {
+                //player delivered correct recipe
+
+                TimeSpan cookTime = (placementTime - startTimeArr[foundIndex]);
+
+                //pointsUI.CalculatePoints(waitingRecipeSO, cookTime);
+
+
+                Remove(foundIndex);
+
+                OnRecipeCompleted?.Invoke(this, new EventArgs());
+                    
+                OnRecipeSuccess?.Invoke(this, new EventArgs());
+                    
+
+                return;
+            }
+
+            
         }
         //no matches found - did not deliver correct recipe
         Debug.Log("incorrect recipe");
@@ -131,12 +147,14 @@ public class DeliveryManager : MonoBehaviour
 
     private void Remove(int index)
     {
-        for (int i = index + 1; i < arrCount; i++)
+        for (int i = index + 1; i < waitingRecipeArrCount; i++)
         {
             waitingRecipeSOArr[i - 1] = waitingRecipeSOArr[i];
+            startTimeArr[i - 1] = startTimeArr[i];
         }
 
-        arrCount--;
+        waitingRecipeArrCount--;
+        startTimeArrCount--;
 
     }
 
@@ -147,10 +165,10 @@ public class DeliveryManager : MonoBehaviour
 
     public int GetArrCount()
     {
-        return arrCount;
+        return waitingRecipeArrCount;
     }
 
-   
+    
 
 
 }
