@@ -22,7 +22,6 @@ public class DeliveryManager : MonoBehaviour
     private static DateTime[] startTimeArr;
     private static int startTimeArrCount = 0;
 
-    [SerializeField] private PointsUI pointsUI;
 
     [SerializeField] private RecipeListSO recipeListSO;
 
@@ -123,8 +122,7 @@ public class DeliveryManager : MonoBehaviour
 
                 TimeSpan cookTime = (placementTime - startTimeArr[foundIndex]);
 
-                //pointsUI.CalculatePoints(waitingRecipeSO, cookTime);
-
+                PointsUI.CalculatePoints(waitingRecipeSO, cookTime);
 
                 Remove(foundIndex);
 
@@ -139,6 +137,7 @@ public class DeliveryManager : MonoBehaviour
             
         }
         //no matches found - did not deliver correct recipe
+        PointsUI.IncorrectRecipePoints();
         Debug.Log("incorrect recipe");
         OnRecipeFailure?.Invoke(this, new EventArgs());
 

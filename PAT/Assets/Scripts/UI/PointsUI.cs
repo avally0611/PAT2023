@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -8,14 +6,22 @@ public class PointsUI : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI pointsText;
 
-    private void UpdateVisual(int num)
+    static int totalPoints = 0;
+    static bool pointsChanged = false;
+
+    public void Update()
     {
-        pointsText.text = num.ToString(); 
+        if (pointsChanged)
+        {
+            pointsText.text = totalPoints.ToString();
+            pointsChanged = false;
+        }
+        
     }
 
-    public void CalculatePoints(RecipeSO recipeSO, TimeSpan duration)
+    public static void CalculatePoints(RecipeSO recipeSO, TimeSpan duration)
     {
-        int totalPoints = 0;
+        int points = 0;
 
         double secondsDifference = duration.TotalSeconds;
 
@@ -25,67 +31,92 @@ public class PointsUI : MonoBehaviour
         {
             if (secondsDifference > 7 && secondsDifference <= 10)
             {
-                totalPoints = 20;
+                points = 20;
             }
             else if (secondsDifference > 5 && secondsDifference <= 7)
             {
-                totalPoints = 23;
+                points = 23;
             }
             else if (secondsDifference >= 1 && secondsDifference <= 5)
             {
-                totalPoints = 25;
+                points = 25;
             }
+            else
+            {
+                points = 5;
+            }
+
         }
         else if (inputRecipeName.Equals("Mega Burger"))
         {
             if (secondsDifference > 13 && secondsDifference <= 17)
             {
-                totalPoints = 27;
+                points = 27;
             }
             else if (secondsDifference > 10 && secondsDifference <= 13)
             {
-                totalPoints = 30;
+                points = 30;
             }
             else if (secondsDifference >= 1 && secondsDifference <= 10)
             {
-                totalPoints = 34;
+                points = 34;
+            }
+            else
+            {
+                points = 5;
             }
         }
         else if (inputRecipeName.Equals("Cheese Burger"))
         {
             if (secondsDifference > 10 && secondsDifference <= 13)
             {
-                totalPoints = 22;
+                points = 22;
             }
             else if (secondsDifference > 7 && secondsDifference <= 10)
             {
-                totalPoints = 25;
+                points = 25;
             }
             else if (secondsDifference >= 1 && secondsDifference <= 7)
             {
-                totalPoints = 28;
+                points = 28;
+            }
+            else
+            {
+                points = 5;
             }
         }
         else if (inputRecipeName.Equals("Salad"))
         {
             if (secondsDifference > 4 && secondsDifference <= 7)
             {
-                totalPoints = 10;
+                points = 10;
             }
             else if (secondsDifference > 3 && secondsDifference <= 4)
             {
-                totalPoints = 11;
+                points = 11;
             }
             else if (secondsDifference >= 1 && secondsDifference <= 3)
             {
-                totalPoints = 17;
+                points = 17;
+            }
+            else
+            {
+                points = 5;
             }
 
 
         }
 
-        UpdateVisual(totalPoints);
+        totalPoints += points;
+        pointsChanged = true;
 
         
     }
+
+    public static void IncorrectRecipePoints()
+    {
+        totalPoints -= 5;
+        pointsChanged = true;
+    }
+
 }
