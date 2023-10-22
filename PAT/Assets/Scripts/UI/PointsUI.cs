@@ -119,4 +119,9 @@ public class PointsUI : MonoBehaviour
         pointsChanged = true;
     }
 
+    public static int GetTotalPoints()
+    {
+        return totalPoints;
+    }
+
 }

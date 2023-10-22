@@ -10,9 +10,8 @@ public class ContainerCounter : BaseCounter, IInteractable
  
     public event EventHandler OnPlayerGrabbedObject;
 
-    /*private KitchenObjectManager kitchenObjectManager;*/
 
-
+    //when player presses 'E' by container - if theyre not holding object - give them object
     public void InteractPrimary(Player player)
     {
         if (!player.HasKitchenObject())
@@ -27,42 +26,18 @@ public class ContainerCounter : BaseCounter, IInteractable
 
     }
 
-
-
+    //interface method - basically checks where counter is to see if player is within reach
     public Transform GetTransform()
     {
         return transform;
     }
 
+    //there is no 'F' function for a clear counter - this is an Interface method - has to be here
     public void InteractSecondary(Player player)
     {
         //nothing needs to be done here
     }
 
 
-    /*public Transform GetKitchenObjectFollowTransform()
-    {
-        //gets counter top point for attached counter
-        return counterTopPoint;
-    }
-
-    public void SetKitchenObject(KitchenObjectManager kitchenObjectManager)
-    {
-        this.kitchenObjectManager = kitchenObjectManager;
-    }
-
-    public KitchenObjectManager GetKitchenObjectManager()
-    {
-        return kitchenObjectManager;
-    }
-
-    public void ClearKitchenObject()
-    {
-        kitchenObjectManager = null;
-    }
-
-    public bool HasKitchenObject()
-    {
-        return kitchenObjectManager != null;
-    }*/
+ 
 }

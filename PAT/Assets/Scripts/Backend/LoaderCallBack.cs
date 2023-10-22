@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//implements smooth loading - no stuuttering or stopping in between scenes
 public class LoaderCallBack : MonoBehaviour
 {
     // this waits for at least one frame to render so the loading screen appears

@@ -37,7 +37,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""Interact"",
+                    ""name"": ""InteractPrimary"",
                     ""type"": ""Button"",
                     ""id"": ""2a75906c-f5e2-4f9d-b0e2-e79fcad718a5"",
                     ""expectedControlType"": ""Button"",
@@ -46,7 +46,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""KitchenAction"",
+                    ""name"": ""InteractSecondary"",
                     ""type"": ""Button"",
                     ""id"": ""81647b01-c121-456e-a429-63508cbdef87"",
                     ""expectedControlType"": ""Button"",
@@ -182,7 +182,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Interact"",
+                    ""action"": ""InteractPrimary"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -193,7 +193,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""KitchenAction"",
+                    ""action"": ""InteractSecondary"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -216,8 +216,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
-        m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
-        m_Player_KitchenAction = m_Player.FindAction("KitchenAction", throwIfNotFound: true);
+        m_Player_InteractPrimary = m_Player.FindAction("InteractPrimary", throwIfNotFound: true);
+        m_Player_InteractSecondary = m_Player.FindAction("InteractSecondary", throwIfNotFound: true);
         m_Player_Pause = m_Player.FindAction("Pause", throwIfNotFound: true);
     }
 
@@ -281,16 +281,16 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Player;
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
     private readonly InputAction m_Player_Move;
-    private readonly InputAction m_Player_Interact;
-    private readonly InputAction m_Player_KitchenAction;
+    private readonly InputAction m_Player_InteractPrimary;
+    private readonly InputAction m_Player_InteractSecondary;
     private readonly InputAction m_Player_Pause;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
         public PlayerActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_Player_Move;
-        public InputAction @Interact => m_Wrapper.m_Player_Interact;
-        public InputAction @KitchenAction => m_Wrapper.m_Player_KitchenAction;
+        public InputAction @InteractPrimary => m_Wrapper.m_Player_InteractPrimary;
+        public InputAction @InteractSecondary => m_Wrapper.m_Player_InteractSecondary;
         public InputAction @Pause => m_Wrapper.m_Player_Pause;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
@@ -304,12 +304,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Move.started += instance.OnMove;
             @Move.performed += instance.OnMove;
             @Move.canceled += instance.OnMove;
-            @Interact.started += instance.OnInteract;
-            @Interact.performed += instance.OnInteract;
-            @Interact.canceled += instance.OnInteract;
-            @KitchenAction.started += instance.OnKitchenAction;
-            @KitchenAction.performed += instance.OnKitchenAction;
-            @KitchenAction.canceled += instance.OnKitchenAction;
+            @InteractPrimary.started += instance.OnInteractPrimary;
+            @InteractPrimary.performed += instance.OnInteractPrimary;
+            @InteractPrimary.canceled += instance.OnInteractPrimary;
+            @InteractSecondary.started += instance.OnInteractSecondary;
+            @InteractSecondary.performed += instance.OnInteractSecondary;
+            @InteractSecondary.canceled += instance.OnInteractSecondary;
             @Pause.started += instance.OnPause;
             @Pause.performed += instance.OnPause;
             @Pause.canceled += instance.OnPause;
@@ -320,12 +320,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Move.started -= instance.OnMove;
             @Move.performed -= instance.OnMove;
             @Move.canceled -= instance.OnMove;
-            @Interact.started -= instance.OnInteract;
-            @Interact.performed -= instance.OnInteract;
-            @Interact.canceled -= instance.OnInteract;
-            @KitchenAction.started -= instance.OnKitchenAction;
-            @KitchenAction.performed -= instance.OnKitchenAction;
-            @KitchenAction.canceled -= instance.OnKitchenAction;
+            @InteractPrimary.started -= instance.OnInteractPrimary;
+            @InteractPrimary.performed -= instance.OnInteractPrimary;
+            @InteractPrimary.canceled -= instance.OnInteractPrimary;
+            @InteractSecondary.started -= instance.OnInteractSecondary;
+            @InteractSecondary.performed -= instance.OnInteractSecondary;
+            @InteractSecondary.canceled -= instance.OnInteractSecondary;
             @Pause.started -= instance.OnPause;
             @Pause.performed -= instance.OnPause;
             @Pause.canceled -= instance.OnPause;
@@ -349,8 +349,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     public interface IPlayerActions
     {
         void OnMove(InputAction.CallbackContext context);
-        void OnInteract(InputAction.CallbackContext context);
-        void OnKitchenAction(InputAction.CallbackContext context);
+        void OnInteractPrimary(InputAction.CallbackContext context);
+        void OnInteractSecondary(InputAction.CallbackContext context);
         void OnPause(InputAction.CallbackContext context);
     }
 }

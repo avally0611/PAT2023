@@ -9,10 +9,7 @@ public class ClearCounter : BaseCounter, IInteractable
   
 
 
-   //private KitchenObjectManager kitchenObjectManager;
-
-
-
+    //what happens when you press 'E' by a clear counter
     public void InteractPrimary(Player player)
     {
         if (!HasKitchenObject())
@@ -65,12 +62,13 @@ public class ClearCounter : BaseCounter, IInteractable
 
     }
 
-
+    //interface method - basically checks where counter is to see if player is within reach
     public Transform GetTransform()
     {
         return transform;
     }
 
+    //there is no 'F' function for a clear counter - this is an Interface method - has to be here
     void IInteractable.InteractSecondary(Player player)
     {
        //nothing here

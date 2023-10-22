@@ -6,13 +6,29 @@ using static CuttingCounter;
 
 public class StoveCounter : BaseCounter, IInteractable, IHasProgress
 {
+    [SerializeField] private FryingRecipeSO[] fryingRecipeSOArray;
+
+    [SerializeField] private BurningRecipeSO[] burningRecipeSOArray;
+
     public event EventHandler<IHasProgress.OnProgressChangedEventArgs> OnProgressChanged;
 
     public event EventHandler<OnStateChangedEventArgs> OnStateChanged;
+
+    //stores info about event that listeners can access
     public class OnStateChangedEventArgs : EventArgs
     {
         public State state;
     }
+
+    private State state;
+    private float fryingTimer;
+    private float burningTimer;
+
+    //ie patty - cooked patty (contains visuals)
+    private FryingRecipeSO fryingRecipeSO;
+    private BurningRecipeSO burningRecipeSO;
+    
+    
 
     public enum State
     {
@@ -22,25 +38,12 @@ public class StoveCounter : BaseCounter, IInteractable, IHasProgress
         Burned,
     }
 
-    [SerializeField] private FryingRecipeSO[] fryingRecipeSOArray;
-
-    [SerializeField] private BurningRecipeSO[] burningRecipeSOArray;
-
-    private State state;
-
-    private float fryingTimer;
-
-    private float burningTimer;
-
-    private FryingRecipeSO fryingRecipeSO;
-
-    private BurningRecipeSO burningRecipeSO;
-
     private void Start()
     {
         state = State.Idle; 
     }
 
+    //basically checks all the cooking states and when a specific state is triggered it does specific actions - more info below
     private void Update()
     {
         if (HasKitchenObject())
@@ -52,8 +55,10 @@ public class StoveCounter : BaseCounter, IInteractable, IHasProgress
 
                 case State.Frying:
 
+                    //start frying timer
                     fryingTimer += Time.deltaTime;
 
+                    //populate loading bar - frying
                     OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs { progressNormalised = fryingTimer / fryingRecipeSO.fryingTimerMax });
 
                     if (fryingTimer > fryingRecipeSO.fryingTimerMax)
@@ -61,12 +66,16 @@ public class StoveCounter : BaseCounter, IInteractable, IHasProgress
                         //patty is fried
                         GetKitchenObjectManager().DestroySelf();
 
+                        //spawns fried patty
                         KitchenObjectManager.SpawnKitchenObject(fryingRecipeSO.output, this);
                         
                         state = State.Fried;
+
+                        
                         burningTimer = 0f;
                         burningRecipeSO = GetBurningRecipeSO(GetKitchenObjectManager().GetKitchenObjects());
 
+                        //loading bar - burning
                         OnStateChanged?.Invoke(this, new OnStateChangedEventArgs { state = state }); 
 
                     }
@@ -75,6 +84,7 @@ public class StoveCounter : BaseCounter, IInteractable, IHasProgress
 
                 case State.Fried:
 
+                    //start burning timer
                     burningTimer += Time.deltaTime;
 
                     OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs { progressNormalised = burningTimer / burningRecipeSO.burningTimerMax });
@@ -102,13 +112,16 @@ public class StoveCounter : BaseCounter, IInteractable, IHasProgress
         }
     }
 
+    //when E is pressed - either drop patty or pick it up
     public void InteractPrimary(Player player)
     {
+        //counter has no object
         if (!HasKitchenObject())
         {
-            //counter has no object
+
             if (player.HasKitchenObject())
             {
+                //gets input obj (raw patty) - gives recipe output options
                 if (HasRecipeWithInput(player.GetKitchenObjectManager().GetKitchenObjects()))
                 {
                     //if player has a object that cna be fried, then you can drop 
@@ -135,6 +148,7 @@ public class StoveCounter : BaseCounter, IInteractable, IHasProgress
             //there is object on counter
             if (player.HasKitchenObject())
             {
+                //checks player has plate - put patty on plate visual 
                 if (player.GetKitchenObjectManager().TryGetPlate(out PlateKitchenObject plateKitchenObject))
                 {
 
@@ -168,21 +182,8 @@ public class StoveCounter : BaseCounter, IInteractable, IHasProgress
         }
     }
 
-    private KitchenObjects GetOutputForInput(KitchenObjects inputKitchenObjects)
-    {
-        FryingRecipeSO fryingRecipeSO = GetFryingRecipeSOWithInput(inputKitchenObjects);
 
-        if (fryingRecipeSO != null)
-        {
-            return fryingRecipeSO.output;
-        }
-        else
-        {
-            return null;
-        }
-
-    }
-
+    //uses below method and just output if there is a frying recipe for object
     private bool HasRecipeWithInput(KitchenObjects inputKitchenObjects)
     {
         FryingRecipeSO fryingRecipeSO = GetFryingRecipeSOWithInput(inputKitchenObjects);
@@ -192,6 +193,7 @@ public class StoveCounter : BaseCounter, IInteractable, IHasProgress
 
     }
 
+    //gets prefab and input/output (patty - cooked patty)
     private FryingRecipeSO GetFryingRecipeSOWithInput(KitchenObjects inputKitchenObjects)
     {
         for (int i = 0; i < fryingRecipeSOArray.Length; i++)
@@ -205,6 +207,7 @@ public class StoveCounter : BaseCounter, IInteractable, IHasProgress
 
     }
 
+    //gets prefab and input/output (patty - burned patty)
     private BurningRecipeSO GetBurningRecipeSO(KitchenObjects inputKitchenObjects)
     {
         for (int i = 0; i < burningRecipeSOArray.Length; i++)
@@ -218,7 +221,7 @@ public class StoveCounter : BaseCounter, IInteractable, IHasProgress
 
     }
 
-
+    //usual
     public Transform GetTransform()
     {
         return transform;
@@ -229,6 +232,7 @@ public class StoveCounter : BaseCounter, IInteractable, IHasProgress
         //nothing here
     }
 
+    //checks if state is fried - used for animations and sounds
     public bool isFried()
     {
         return state == State.Fried;

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class StoveCounterVisual : MonoBehaviour
 {
+
+    //handles animations
     [SerializeField] private GameObject stoveOnGameObject;
     [SerializeField] private GameObject particlesGameObject;
     [SerializeField] private StoveCounter stoveCounter;
@@ -15,6 +17,7 @@ public class StoveCounterVisual : MonoBehaviour
 
     private void StoveCounter_OnStateChanged(object sender, StoveCounter.OnStateChangedEventArgs e)
     {
+        //accoridng to state - do animations
         bool showVisual = e.state == StoveCounter.State.Frying || e.state == StoveCounter.State.Fried;
         stoveOnGameObject.SetActive(showVisual);
         particlesGameObject.SetActive(showVisual);

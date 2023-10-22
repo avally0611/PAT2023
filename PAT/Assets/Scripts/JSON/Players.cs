@@ -2,7 +2,7 @@ using System;
 
 //this means the object can be saved to files in a specific format
 [Serializable]
-public class Players 
+public class Players
 {
     public int ID;
     public string username;
@@ -12,7 +12,7 @@ public class Players
     private static int nextID = 0;
 
     //constructor method that takes in user's username and password
-    public Players(string unm, string pw) 
+    public Players(string unm, string pw)
     {
         ID = nextID;
         this.username = unm;
@@ -20,9 +20,4 @@ public class Players
         nextID++;
     }
 
-    //there is a base class in unity which already has a ToString() - use override - for our class specifically
-    public override string ToString()
-    {
-        return ID + "\n" + username + "\n" + password; 
-    }
 }

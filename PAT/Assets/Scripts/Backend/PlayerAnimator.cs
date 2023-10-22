@@ -6,6 +6,7 @@ public class PlayerAnimator : MonoBehaviour
 {
     private Animator animator;
 
+    //animation name
     private const string IS_WALKING = "isWalking";
 
     [SerializeField] private Player player;

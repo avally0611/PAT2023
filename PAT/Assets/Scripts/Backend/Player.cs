@@ -3,26 +3,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//handles player movement and interaction
 public class Player : MonoBehaviour, IKitchenObjectParent
 
 {
     //show in the unity editor (serialized)
+
     [SerializeField] private float moveSpeed = 7f;
-
-    private bool isWalking;
-
-    private Vector3 lastInteraction;
-
-    [SerializeField] GameInput gameInput;
-
-    private KitchenObjectManager kitchenObjectManager;
-
+    //where object placed on player
     [SerializeField] private Transform kitchenObjectHoldPoint;
-
-    public event EventHandler OnPickedSomething;
-
+    [SerializeField] GameInput gameInput;
     [SerializeField] GameManager gameManager;
 
+    //for animation
+    private bool isWalking;
+    private Vector3 lastInteraction;
+    private KitchenObjectManager kitchenObjectManager;
+
+
+    public event EventHandler OnPickedSomething;
 
 
     //runs every frame
@@ -30,21 +29,20 @@ public class Player : MonoBehaviour, IKitchenObjectParent
     {
         HandleMovement();
 
-       
-
     }
 
     private void Start()
     {
         //listening for keypress 
-        gameInput.OnInteractAction += GameInput_OnInteractAction;
-        gameInput.OnKitchenActionDone += GameInput_OnKitchenAction;
+        gameInput.OnInteractPrimary += GameInput_OnInteractPrimary;
+        gameInput.OnInteractSecondary += GameInput_OnInteractSecondary;
         
     }
 
-    private void GameInput_OnKitchenAction(object sender, System.EventArgs e)
+    //on 'F' pressed = get closest counter and call that action in that class
+    private void GameInput_OnInteractSecondary(object sender, System.EventArgs e)
     {
-
+        //dont need {} when doing early return
         if (!gameManager.IsGamePlaying())
             return;
 
@@ -59,8 +57,8 @@ public class Player : MonoBehaviour, IKitchenObjectParent
         }
     }
 
-    //gets object interacted with and then calls that specific object interact method
-    private void GameInput_OnInteractAction(object sender, System.EventArgs e)
+    //if 'E' pressed - gets object interacted with and then calls that specific object interact method
+    private void GameInput_OnInteractPrimary(object sender, System.EventArgs e)
     {
         if (!gameManager.IsGamePlaying())
             return;
@@ -85,6 +83,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent
         return isWalking;
     }
 
+    //handles all the movement - WASD keys 
     private void HandleMovement()
     {
 
@@ -157,7 +156,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent
 
 
 
-    //gets the object interacted with and parses to GameInput_OnInteractAction
+    //gets the closest object interacted with and parses to GameInput_OnInteractPrimary
     public IInteractable GetInteractableObject()
     {
         IInteractable[] interactableObjects = new IInteractable[500];
@@ -219,16 +218,19 @@ public class Player : MonoBehaviour, IKitchenObjectParent
         }
     }
 
+    //gets the kitchenobj msnager on player
     public KitchenObjectManager GetKitchenObjectManager()
     {
         return kitchenObjectManager;
     }
 
+    //clears object from player hands
     public void ClearKitchenObject()
     {
         kitchenObjectManager = null;
     }
 
+    //checks if player has object
     public bool HasKitchenObject()
     {
         return kitchenObjectManager != null;

@@ -7,6 +7,8 @@ using UnityEngine.UI;
 
 
 //NOTE FOR MR B - it's a bit tricky to split this into backend and UI 
+
+//USES JSON to read and write user details
 public class LoginManager : MonoBehaviour
 {
     [SerializeField] private Button loginButton;
@@ -23,13 +25,7 @@ public class LoginManager : MonoBehaviour
     private int arrSize = 0;
     private string passwordErrorMessage;
 
-    private void Start()
-    {
-        for (int i = 0; i < arrSize; i++)
-        {
-            Debug.Log(playersArr[i]);
-        }
-    }
+    
 
     private void Awake()
     {
@@ -73,7 +69,7 @@ public class LoginManager : MonoBehaviour
         
     }
 
-
+    //creates a new player object which is then parsed to SaveToJson method which creates a file and saves data there
     private void AddUser()
     {
 
@@ -91,7 +87,7 @@ public class LoginManager : MonoBehaviour
 
     }
 
-    //method searches for username and checks if password matches
+    //method searches for username within JSON file and checks if password matches the one from JSON file
     public bool CheckUser()
     {
         bool correctUserDetails = false;

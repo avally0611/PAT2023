@@ -2,8 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
+using UnityEditor;
 using UnityEngine;
 
+//HANDLES LOGIC WITH REGARDS TO WAITING RECIPES AND DELIVERING RECIPES
 public class DeliveryManager : MonoBehaviour
 {
     [SerializeField] private RecipeListSO recipeListSO;
@@ -15,20 +17,21 @@ public class DeliveryManager : MonoBehaviour
     public event EventHandler OnRecipeSuccess;
     public event EventHandler OnRecipeFailure;
 
-    //spawn random list
+    //random recipes that need to be completed
     private static RecipeSO[] waitingRecipeSOArr;
     private static int waitingRecipeArrCount = 0;
 
-    //array that stores time of recipes 
+    //array that stores start time of recipes - calculate points
     private static DateTime[] startTimeArr;
     private static int startTimeArrCount = 0;
 
-
+    //timer to spawn recipes
     private float spawnRecipeTimer;
-    private float spawnRecipeTimerMax = 2f;
+    private float spawnRecipeTimerMax = 4f;
 
-    private int waitingRecipesMax = 6;
+    private int waitingRecipesMax = 3;
 
+    //for results screen
     private static int totalRecipesCompleted = 0;
     private static int totalRecipesIncorrect = 0;
 
@@ -38,6 +41,7 @@ public class DeliveryManager : MonoBehaviour
         startTimeArr = new DateTime[10];
     }
 
+    //checks if game on - start recipe spawning timer - adds recipe to waiting recipes array
     private void Update()
     {
         if (gameManager.IsGamePlaying())
@@ -75,30 +79,31 @@ public class DeliveryManager : MonoBehaviour
         
     }
 
-    //maybe add smth with regards to tips - if it fulfills first order - tip amount between 5-10?
+    //logic to check if any of waiting recipes match with delivered recipes - if so cue animations/remove waiitng recipe/points
     public void DeliverRecipe(PlateKitchenObject plateKitchenObject)
     {
+        //when order finished - points calculations
         DateTime placementTime = DateTime.Now;
         int foundIndex = -1;
 
         for (int i = 0; i < waitingRecipeArrCount; i++)
         {
+            //go through each waiting recipe and see if ingredients match
             RecipeSO waitingRecipeSO = waitingRecipeSOArr[i];
             
-            //have same num of ingredients - take it out
-            
+            //found recipe
             foundIndex = i;
 
+            //going through all ingredients in the recipe
             for (int j = 0; j < waitingRecipeSO.kitchenObjectsArr.Length; j++)
             {
-                //going through all ingredients in the recipe
                 bool ingredientFound = false;
-                    
+
+                //going through all ingredients on plate
                 for (int k = 0; k < plateKitchenObject.GetArrCount(); k++)
                 {
-                    //going through all ingredients on plate
-
-                    //check if so is passing reference/value
+                    
+                    //check if first ingreidens match
                     if (waitingRecipeSO.kitchenObjectsArr[j].Equals(plateKitchenObject.GetKitchenObjectsArr()[k]))
                     {
                         //ingredient matches
@@ -121,6 +126,7 @@ public class DeliveryManager : MonoBehaviour
             if (foundIndex >= 0)
             {
                 //player delivered correct recipe
+
                 totalRecipesCompleted++;
 
                 TimeSpan cookTime = (placementTime - startTimeArr[foundIndex]);
@@ -141,7 +147,9 @@ public class DeliveryManager : MonoBehaviour
         }
         //no matches found - did not deliver correct recipe
         PointsUI.IncorrectRecipePoints();
+
         totalRecipesIncorrect++;
+
         OnRecipeFailure?.Invoke(this, new EventArgs());
 
 
@@ -160,16 +168,19 @@ public class DeliveryManager : MonoBehaviour
 
     }
 
+    //gets arrays of all recipes : Burger, cheese burger, salad, mega burger
     public RecipeSO[] GetWaitingRecipeSoArr()
     {
         return waitingRecipeSOArr;
     }
 
+    //get arr size - used in UI implementaion
     public int GetArrCount()
     {
         return waitingRecipeArrCount;
     }
 
+    //for results
     public static int GetTotalRecipesCompeleted()
     {
         return totalRecipesCompleted;

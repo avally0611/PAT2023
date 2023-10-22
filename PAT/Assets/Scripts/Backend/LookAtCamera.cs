@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//this whole class essentially orientate things - so loading bars will face the camera not the player , when player picks/places it looks at camera
 public class LookAtCamera : MonoBehaviour
 {
     private enum Mode

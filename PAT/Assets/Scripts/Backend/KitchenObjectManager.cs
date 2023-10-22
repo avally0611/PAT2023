@@ -2,12 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//
 public class KitchenObjectManager : MonoBehaviour
 {
     [SerializeField] private KitchenObjects kitchenobject;
 
     private IKitchenObjectParent kitchenObjectParent;
 
+    //basically gets the Kitchen Object Scriptable objects
     public KitchenObjects GetKitchenObjects() 
     { 
         return kitchenobject; 
@@ -38,11 +40,8 @@ public class KitchenObjectManager : MonoBehaviour
         transform.parent = kitchenObjectParent.GetKitchenObjectFollowTransform();
         transform.localPosition = Vector3.zero;
     }
-    public IKitchenObjectParent GetKitchenObjectParent()
-    {
-        return kitchenObjectParent;
-    }
-
+    
+    //makes kitchen object disappear - e.g throw smth in the trash
     public void DestroySelf()
     {
         kitchenObjectParent.ClearKitchenObject();
@@ -50,6 +49,7 @@ public class KitchenObjectManager : MonoBehaviour
         Destroy(gameObject);
     }
 
+    //basically checks if plate exists - can be used to check if player holfing plate or plate on counter...
     public bool TryGetPlate(out PlateKitchenObject plateKitchenObject)
     {
         if (this is PlateKitchenObject)
@@ -63,7 +63,8 @@ public class KitchenObjectManager : MonoBehaviour
             return false; 
         }
     }
-
+    
+    //does as it says - spawns a kitchenobject 
     public static KitchenObjectManager SpawnKitchenObject(KitchenObjects kitchenObjects, IKitchenObjectParent kitchenObjectParent)
     {
         Transform kitchenObjTransform = Instantiate(kitchenObjects.prefab);

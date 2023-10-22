@@ -5,11 +5,12 @@ using UnityEngine;
 
 public class GameOverUI : MonoBehaviour
 {
-    //include switch that goes to achievements screen that shows recipes delivered, money and tips
+    
 
     [SerializeField] GameManager gameManager;
     private void Start()
     {
+        //listens to event for when game is in "Game Over" state
         gameManager.OnStateChanged += GameManager_OnStateChanged;
         Hide();
     }
@@ -22,6 +23,9 @@ public class GameOverUI : MonoBehaviour
         {
             
             Show();
+
+            //this is to delay the loading of next scene so Game Over sign is showed (When using Invoke =, you parse method as string)
+            Invoke("LoadResultsScene", 10f);
         }
         else
         {
@@ -37,6 +41,11 @@ public class GameOverUI : MonoBehaviour
     private void Hide()
     {
         gameObject.SetActive(false);
+    }
+
+    private void LoadResultsScene()
+    {
+        Loader.Load(Loader.Scene.ResultsScene);
     }
 
 }

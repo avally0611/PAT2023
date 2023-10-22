@@ -5,22 +5,25 @@ using UnityEngine;
 
 public class CuttingCounter : BaseCounter, IInteractable, IHasProgress
 {
+    [SerializeField] private CuttingRecipeSO[] cuttingRecipeSOArray;
+
     //making new event that comp listens to and then when it happens it goes to class to get extra info about it
     public event EventHandler<IHasProgress.OnProgressChangedEventArgs> OnProgressChanged;
+
     public event EventHandler OnCut;
 
     //for cut sfx
     public static event EventHandler OnAnyCut;
 
+    private int cuttingProgress;
+    
+    //resets static event - explained in base counter - static events keep prev state
     public static new void ResetStaticData()
     {
         OnAnyCut = null;
     }
 
-    [SerializeField] private CuttingRecipeSO[] cuttingRecipeSOArray;
-
-    private int cuttingProgress;
-
+    //basically does all the checks when player presses E by cutting counter - if hands full = drop object on counter OR if hands empty = pick up OR if plate = put obj on plate AND makes sure only cuttable objects are placed
     public void InteractPrimary(Player player)
     {
         if (!HasKitchenObject())
@@ -53,7 +56,7 @@ public class CuttingCounter : BaseCounter, IInteractable, IHasProgress
                 if (player.GetKitchenObjectManager().TryGetPlate(out PlateKitchenObject plateKitchenObject))
                 {
 
-                    //might change this  - basically checks if you have only added one type of ingredieant
+                    //basically checks if you have only added one type of ingredieant
                     if (plateKitchenObject.TryAddIngredient(GetKitchenObjectManager().GetKitchenObjects()))
                     {
                         GetKitchenObjectManager().DestroySelf();
@@ -70,11 +73,13 @@ public class CuttingCounter : BaseCounter, IInteractable, IHasProgress
 
     }
 
+    //when player presses F - check what type object - chop (cue chopping animation and loading bar)
     public void InteractSecondary(Player player)
     {
         //only cut if the counter has object and object on counter can be cut according to recipe
         if (HasKitchenObject() && HasRecipeWithInput(GetKitchenObjectManager().GetKitchenObjects()))
         {
+            //for loading bar
             cuttingProgress++;
 
             OnCut?.Invoke(this, EventArgs.Empty);
@@ -98,6 +103,7 @@ public class CuttingCounter : BaseCounter, IInteractable, IHasProgress
         }
     }
 
+    //basically checks what object is put down and gives cut version - uses scriptable objects (SORT OF LIKE CLASSES - STUDENT CLASS)
     private KitchenObjects GetOutputForInput(KitchenObjects inputKitchenObjects)
     {
         CuttingRecipeSO cuttingRecipeSO = GetCuttingRecipeSoWithInput(inputKitchenObjects);
@@ -113,6 +119,7 @@ public class CuttingCounter : BaseCounter, IInteractable, IHasProgress
 
     }
 
+    //gives you cutting recipe according to object placed - e.g I place tomato I get tomato SO cutting recipe: IE tomato - tomato slices
     private CuttingRecipeSO GetCuttingRecipeSoWithInput(KitchenObjects inputKitchenObjects)
     {
         for (int i = 0; i < cuttingRecipeSOArray.Length; i++)
@@ -126,6 +133,7 @@ public class CuttingCounter : BaseCounter, IInteractable, IHasProgress
 
     }
 
+    //basically checks if object has a cutting recipe - ie can object be cut
     private bool HasRecipeWithInput(KitchenObjects inputKitchenObjects)
     {
         CuttingRecipeSO cuttingRecipeSO = GetCuttingRecipeSoWithInput(inputKitchenObjects);
@@ -135,6 +143,7 @@ public class CuttingCounter : BaseCounter, IInteractable, IHasProgress
 
     }
 
+    //same as usual - position of counter - see if player close enough to interact
     public Transform GetTransform()
     {
         return transform;

@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class CuttingCounterVisual : MonoBehaviour
 {
-    private const string CUT = "Cut";
-
     [SerializeField] private CuttingCounter cuttingCounter;
-
+    
+    //string for animation name
+    private const string CUT = "Cut";
     private Animator animator;
+
+
 
     private void Awake()
     {
@@ -17,11 +19,13 @@ public class CuttingCounterVisual : MonoBehaviour
 
     private void Start()
     {
+        //when player starts cutting cue evemt
         cuttingCounter.OnCut += CuttingCounter_OnCut;
     }
 
     private void CuttingCounter_OnCut(object sender, System.EventArgs e)
     {
+        //cue cutting animation
         animator.SetTrigger(CUT);
     }
 

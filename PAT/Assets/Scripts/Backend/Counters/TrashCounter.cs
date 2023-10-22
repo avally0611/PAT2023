@@ -7,12 +7,14 @@ public class TrashCounter : BaseCounter, IInteractable
 {
 
     public static event EventHandler OnAnyObjectTrashed;
-
+    
+    //reset static events - keep previosu data
     public new static void ResetStaticData()
     {
         OnAnyObjectTrashed = null;
     }
 
+    //if player has object - trash it - destroy object & sound
     public void InteractPrimary(Player player)
     {
         if (player.HasKitchenObject())
@@ -28,6 +30,7 @@ public class TrashCounter : BaseCounter, IInteractable
         //no other specific action
     }
 
+    //usual - position to check player within bounds to interact
     public Transform GetTransform()
     {
         return transform;

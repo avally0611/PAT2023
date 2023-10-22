@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 //not attached to an object
+//handles all the scene changing in the game 
 public static class Loader 
 {
 
@@ -14,10 +15,12 @@ public static class Loader
         LoadingScene,
         StatsScene,
         LoginScene,
+        ResultsScene,
     }
 
     private static Scene targetScene;
 
+    //loads scene
     public static void Load(Scene targetScene)
     {
         Loader.targetScene = targetScene;
@@ -27,6 +30,7 @@ public static class Loader
         
     }
 
+    //implements smooth loading - no stuuttering or stopping in between scenes
     public static void LoaderCallBack()
     {
         SceneManager.LoadScene(targetScene.ToString());
