@@ -12,6 +12,8 @@ public static class Loader
         MainMenuScene,
         GameScene,
         LoadingScene,
+        StatsScene,
+        LoginScene,
     }
 
     private static Scene targetScene;

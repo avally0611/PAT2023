@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class DeliveryManager : MonoBehaviour
 {
+    [SerializeField] private RecipeListSO recipeListSO;
     [SerializeField] GameManager gameManager;
 
     public event EventHandler OnRecipeSpawned;
@@ -23,12 +24,13 @@ public class DeliveryManager : MonoBehaviour
     private static int startTimeArrCount = 0;
 
 
-    [SerializeField] private RecipeListSO recipeListSO;
-
     private float spawnRecipeTimer;
     private float spawnRecipeTimerMax = 2f;
 
     private int waitingRecipesMax = 6;
+
+    private static int totalRecipesCompleted = 0;
+    private static int totalRecipesIncorrect = 0;
 
     private void Awake()
     {
@@ -119,6 +121,7 @@ public class DeliveryManager : MonoBehaviour
             if (foundIndex >= 0)
             {
                 //player delivered correct recipe
+                totalRecipesCompleted++;
 
                 TimeSpan cookTime = (placementTime - startTimeArr[foundIndex]);
 
@@ -138,7 +141,7 @@ public class DeliveryManager : MonoBehaviour
         }
         //no matches found - did not deliver correct recipe
         PointsUI.IncorrectRecipePoints();
-        Debug.Log("incorrect recipe");
+        totalRecipesIncorrect++;
         OnRecipeFailure?.Invoke(this, new EventArgs());
 
 
@@ -165,6 +168,16 @@ public class DeliveryManager : MonoBehaviour
     public int GetArrCount()
     {
         return waitingRecipeArrCount;
+    }
+
+    public static int GetTotalRecipesCompeleted()
+    {
+        return totalRecipesCompleted;
+    }
+
+    public static int GetTotalRecipesIncorrect()
+    {
+        return totalRecipesIncorrect;
     }
 
     
