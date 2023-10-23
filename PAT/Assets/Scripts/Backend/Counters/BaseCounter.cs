@@ -16,6 +16,7 @@ public class BaseCounter : MonoBehaviour, IKitchenObjectParent
     }
 
     //gets counter top point for attached child counter
+    //returns a Transform - specific position on top of counter
     public Transform GetKitchenObjectFollowTransform()
     {
         
@@ -23,6 +24,7 @@ public class BaseCounter : MonoBehaviour, IKitchenObjectParent
     }
 
     //basically moves kitchen object to counter given (moves the object and animation and prefab)
+    //takes in a KitchenObjectManager object - hanldes kitchen objects
     public void SetKitchenObject(KitchenObjectManager kitchenObjectManager)
     {
         this.kitchenObjectManager = kitchenObjectManager;
@@ -34,6 +36,7 @@ public class BaseCounter : MonoBehaviour, IKitchenObjectParent
     }
 
     //used in all child counters - gets the kitchenobj manager so they can check if theres plate, spawn ingredient, destory kitchen obj, etc
+    //return type is a KitchenObjrctManager
     public KitchenObjectManager GetKitchenObjectManager()
     {
         return kitchenObjectManager;
@@ -46,6 +49,7 @@ public class BaseCounter : MonoBehaviour, IKitchenObjectParent
     }
 
     //does as it says - check if kitchen obj manager has kitchen objects stored
+    //returns bool if kitchen obj manager has kitchen object stored 
     public bool HasKitchenObject()
     {
         return kitchenObjectManager != null;

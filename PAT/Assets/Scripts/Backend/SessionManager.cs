@@ -16,7 +16,7 @@ public class SessionManager : MonoBehaviour
     private int sessionScore;
 
     private Sessions[] sessionsArr;
-    private int arrSize = 0;
+   
 
     private void Start()
     {
@@ -56,11 +56,35 @@ public class SessionManager : MonoBehaviour
         numIncorrectRecipes = DeliveryManager.GetTotalRecipesIncorrect();
         sessionScore = PointsUI.GetTotalPoints();
 
-        sessionsArr[arrSize] = new Sessions(ID, startTime, endTime, numRecipesCompleted, numIncorrectRecipes, sessionScore);
-        arrSize++;
+        string startTimeString = startTime.ToString("HH:mm:ss");
+        string endTimeString = endTime.ToString("HH:mm:ss");
 
-    
+        Sessions newSession = new Sessions(ID, startTimeString, endTimeString, numRecipesCompleted, numIncorrectRecipes, sessionScore);
 
-        FileHandler.SaveToJSON<Sessions>(sessionsArr, fileName);
+        // Read existing player data from the JSON file
+        Sessions[] existingSessions = FileHandler.ReadFromJSON<Sessions>(fileName);
+
+
+        // Create a new array to hold the combined data
+        Sessions[] combinedSessions;
+
+        if (existingSessions != null)
+        {
+            // Append the new player to the existing data
+            combinedSessions = new Sessions[existingSessions.Length + 1];
+            existingSessions.CopyTo(combinedSessions, 0);
+            combinedSessions[existingSessions.Length] = newSession;
+        }
+        else
+        {
+            // If there is no existing data, create a new array with just the new player
+            combinedSessions = new Sessions[] { newSession };
+        }
+
+        // Save the combined data to the JSON file
+        FileHandler.SaveToJSON<Sessions>(combinedSessions, fileName);
+
+
+        
     }
 }

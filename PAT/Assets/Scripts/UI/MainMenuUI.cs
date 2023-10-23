@@ -9,14 +9,24 @@ public class MainMenuUI : MonoBehaviour
     [SerializeField] private Button playButton;
     [SerializeField] private Button signoutButton;
     [SerializeField] private Button statsButton;
+    [SerializeField] private Button controlsButton;
+    [SerializeField] private Button quitButton;
+    [SerializeField] private GameObject controlsUI;
+
+    private void Start()
+    {
+        controlsUI.SetActive(false);
+    }
 
     private void Awake()
     {
         playButton.onClick.AddListener(PlayClick);
         signoutButton.onClick.AddListener(SignoutClick);
         statsButton.onClick.AddListener(StatsClick);
-   
-        
+        controlsButton.onClick.AddListener(Show);
+        quitButton.onClick.AddListener(Hide);
+
+
         Time.timeScale = 1f;
     }
 
@@ -34,6 +44,17 @@ public class MainMenuUI : MonoBehaviour
     {
         Loader.Load(Loader.Scene.StatsScene);
     }
+
+    private void Show()
+    {
+        controlsUI.SetActive(true);
+    }
+
+    private void Hide()
+    {
+        controlsUI.SetActive(false);
+    }
+
 
 
 }

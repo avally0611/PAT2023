@@ -10,6 +10,7 @@ public class ClearCounter : BaseCounter, IInteractable
 
 
     //what happens when you press 'E' by a clear counter
+    //takes in a player object - to check if player has objects 
     public void InteractPrimary(Player player)
     {
         if (!HasKitchenObject())
@@ -63,6 +64,7 @@ public class ClearCounter : BaseCounter, IInteractable
     }
 
     //interface method - basically checks where counter is to see if player is within reach
+    //returns transform of counter
     public Transform GetTransform()
     {
         return transform;

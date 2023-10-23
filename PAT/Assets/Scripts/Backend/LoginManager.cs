@@ -4,6 +4,9 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using System.IO;
+using System;
+
 
 
 //NOTE FOR MR B - it's a bit tricky to split this into backend and UI 
@@ -20,24 +23,24 @@ public class LoginManager : MonoBehaviour
     
     //this field will be used in other classes such as statistics class
     private static int currentPlayerID;
+    private static int autoIncrimentingID = 0;
 
-    private Players[] playersArr;
-    private int arrSize = 0;
+    private Players[] playersArr = new Players[100];
+
     private string passwordErrorMessage;
+
 
     
 
     private void Awake()
-    {
-        //Since this is a basic, personal game I think 100 as a size will be enough
-         playersArr = new Players[100];
-        
+    {   
 
         loginButton.onClick.AddListener(LoginClick);
         signupButton.onClick.AddListener(SignupClick);
 
     }
 
+    //when login button clicked
     private void LoginClick()
     {
         if (CheckUser())
@@ -54,6 +57,8 @@ public class LoginManager : MonoBehaviour
 
         
     }
+
+    //when signup button clicked
     private void SignupClick()
     {
         if (IsStrongPassword())
@@ -69,20 +74,45 @@ public class LoginManager : MonoBehaviour
         
     }
 
-    //creates a new player object which is then parsed to SaveToJson method which creates a file and saves data there
+    //creates a new player object, gets existing objects and combines with new object in array, then parsed to SaveToJson method which creates a file and saves data there
     private void AddUser()
     {
 
-        playersArr[arrSize] = new Players(usernameInputField.text, passwordInputField.text);
-        arrSize++;
+
+        Players newPlayer = new Players(autoIncrimentingID, usernameInputField.text, passwordInputField.text);
+        autoIncrimentingID++;
+
+        // Read existing player data from the JSON file
+        Players[] existingPlayers = FileHandler.ReadFromJSON<Players>(fileName);
+
+
+        // Create a new array to hold the combined data (including the new player)
+        Players[] combinedPlayers;
+
+        if (existingPlayers != null)
+        {
+            // Append the new player to the existing data
+            combinedPlayers = new Players[existingPlayers.Length + 1];
+            existingPlayers.CopyTo(combinedPlayers, 0);
+            combinedPlayers[existingPlayers.Length] = newPlayer;
+        }
+        else
+        {
+            // If there is no existing data, create a new array with just the new player
+            combinedPlayers = new Players[] { newPlayer };
+        }
+
+        // Save the combined data to the JSON file
+        FileHandler.SaveToJSON<Players>(combinedPlayers, fileName);
 
         usernameInputField.text = "";
         passwordInputField.text = "";
         errorText.text = string.Empty;
 
-        FileHandler.SaveToJSON<Players>(playersArr, fileName);
-
         errorText.text = "Signup successful!\nWelcome";
+
+
+
 
 
     }
@@ -203,6 +233,7 @@ public class LoginManager : MonoBehaviour
 
     }
 
+    //gets current ID - used in other screens - returns int
     public static int GetCurrentPlayerID()
     {
         return currentPlayerID;

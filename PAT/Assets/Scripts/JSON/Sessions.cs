@@ -5,14 +5,14 @@ using System;
 public class Sessions
 {
     public int ID;
-    public DateTime startTime;
-    public DateTime endTime;
+    public string startTime;
+    public string endTime;
     public int numRecipesCompleted;
     public int numIncorrectRecipes;
     public int sessionScore;
 
     //constructor method that takes in user's username and password
-    public Sessions(int id, DateTime st, DateTime et, int numRecComp, int numIncompRec, int score)
+    public Sessions(int id, string st, string et, int numRecComp, int numIncompRec, int score)
     {
         this.ID = id;
         this.startTime = st;    

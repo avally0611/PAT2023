@@ -8,16 +8,14 @@ public class Players
     public string username;
     public string password;
 
-    //belongs to class - not specific obj - we want to have a unique constant ID so it must not belong to object - This field is like autoimcrimenting in SQL
-    private static int nextID = 0;
-
+  
     //constructor method that takes in user's username and password
-    public Players(string unm, string pw)
+    public Players(int id,string unm, string pw)
     {
-        ID = nextID;
+        this.ID = id;
         this.username = unm;
         this.password = pw;
-        nextID++;
+        
     }
 
 }

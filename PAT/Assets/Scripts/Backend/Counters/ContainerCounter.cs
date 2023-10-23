@@ -12,6 +12,7 @@ public class ContainerCounter : BaseCounter, IInteractable
 
 
     //when player presses 'E' by container - if theyre not holding object - give them object
+    //takes in player obj to check if player holding item
     public void InteractPrimary(Player player)
     {
         if (!player.HasKitchenObject())
@@ -27,6 +28,7 @@ public class ContainerCounter : BaseCounter, IInteractable
     }
 
     //interface method - basically checks where counter is to see if player is within reach
+    //returns transform of counter
     public Transform GetTransform()
     {
         return transform;

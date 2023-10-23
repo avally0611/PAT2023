@@ -14,9 +14,30 @@ public static class FileHandler
     //other scripts will call this method to save data - LoginManager
     public static void SaveToJSON<T>(T[] toSave, string filename)
     {
-        Debug.Log(GetPath(filename));
+
+        String path = GetPath(filename);
+
+        //T[] existingData = ReadFromJSON<T>(filename);
+
+        //// If the existing data is null, create a new array
+        //if (existingData == null)
+        //{
+        //    existingData = new T[0];
+        //}
+
+        //// Combine the existing data and the new data
+        //T[] updatedData = new T[existingData.Length + toSave.Length];
+        //Array.Copy(existingData, updatedData, existingData.Length);
+        //Array.Copy(toSave, 0, updatedData, existingData.Length, toSave.Length);
+
+        // Serialize the updated data to JSON
         string content = JsonHelper.ToJson<T>(toSave);
-        WriteFile(GetPath(filename), content);
+
+        // Write the JSON data back to the file, overwriting its content
+        WriteFile(path, content);
+
+
+        
     }
 
     public static T[] ReadFromJSON<T>(string filename)
@@ -45,12 +66,15 @@ public static class FileHandler
 
     private static void WriteFile(string path, string content)
     {
-        FileStream fileStream = new FileStream(path, FileMode.Create);
+        
+            FileStream fileStream = new FileStream(path, FileMode.Create);
+            using (StreamWriter writer = new StreamWriter(fileStream))
+            {
+                writer.Write(content);
+            }
+        
 
-        using (StreamWriter writer = new StreamWriter(fileStream)) 
-        { 
-            writer.Write(content); 
-        }
+        
     }
 
     private static string ReadFile(string path)
@@ -65,7 +89,22 @@ public static class FileHandler
         }
         return null;
     }
+
+    public static bool PathExists(string fileName)
+    {
+        string path = GetPath(fileName);
+
+        if (File.Exists(path))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+
 }
+
 
 
 //this code is from stack overflow: https://stackoverflow.com/questions/36239705/serialize-and-deserialize-json-and-json-array-in-unity

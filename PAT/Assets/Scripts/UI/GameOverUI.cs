@@ -25,7 +25,7 @@ public class GameOverUI : MonoBehaviour
             Show();
 
             //this is to delay the loading of next scene so Game Over sign is showed (When using Invoke =, you parse method as string)
-            Invoke("LoadResultsScene", 10f);
+            Invoke("LoadResultsScene", 5f);
         }
         else
         {

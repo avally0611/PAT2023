@@ -24,7 +24,9 @@ public class CuttingCounter : BaseCounter, IInteractable, IHasProgress
     }
 
     //basically does all the checks when player presses E by cutting counter - if hands full = drop object on counter OR if hands empty = pick up OR if plate = put obj on plate AND makes sure only cuttable objects are placed
+    //takes in player obj - see if player holding smth
     public void InteractPrimary(Player player)
+
     {
         if (!HasKitchenObject())
         {
@@ -74,6 +76,7 @@ public class CuttingCounter : BaseCounter, IInteractable, IHasProgress
     }
 
     //when player presses F - check what type object - chop (cue chopping animation and loading bar)
+    //takes in player obj - see if player holding smth
     public void InteractSecondary(Player player)
     {
         //only cut if the counter has object and object on counter can be cut according to recipe
@@ -104,6 +107,7 @@ public class CuttingCounter : BaseCounter, IInteractable, IHasProgress
     }
 
     //basically checks what object is put down and gives cut version - uses scriptable objects (SORT OF LIKE CLASSES - STUDENT CLASS)
+    //returns a kitchen object (tomato, cheese, etc) based on the parameters - based on what kitchen object you give in the argument (Uses cutting recipe to see if you can get cut version of obj)
     private KitchenObjects GetOutputForInput(KitchenObjects inputKitchenObjects)
     {
         CuttingRecipeSO cuttingRecipeSO = GetCuttingRecipeSoWithInput(inputKitchenObjects);
@@ -120,6 +124,7 @@ public class CuttingCounter : BaseCounter, IInteractable, IHasProgress
     }
 
     //gives you cutting recipe according to object placed - e.g I place tomato I get tomato SO cutting recipe: IE tomato - tomato slices
+    //
     private CuttingRecipeSO GetCuttingRecipeSoWithInput(KitchenObjects inputKitchenObjects)
     {
         for (int i = 0; i < cuttingRecipeSOArray.Length; i++)

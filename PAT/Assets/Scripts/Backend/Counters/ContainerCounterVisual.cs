@@ -24,6 +24,7 @@ public class ContainerCounterVisual : MonoBehaviour
     }
 
     //basically when player presses E by container - do the opening counter animation
+    //this is an event method - listener method (subscriber method)
     private void ContainerCounter_OnPlayerGrabbedObject(object sender, System.EventArgs e)
     {
         animator.SetTrigger(OPEN_CLOSE);
