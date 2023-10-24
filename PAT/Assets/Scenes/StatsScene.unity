@@ -766,6 +766,7 @@ MonoBehaviour:
   outputNumRecDelivered: {fileID: 2102269027}
   outputNumIncorrectRecipes: {fileID: 1032820134}
   outputNumHoursPlayed: {fileID: 1959291551}
+  homeButton: {fileID: 983848094}
 --- !u!1 &420088502
 GameObject:
   m_ObjectHideFlags: 0

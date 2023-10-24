@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class StatsUI : MonoBehaviour
 {
@@ -10,6 +11,13 @@ public class StatsUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI outputNumRecDelivered;
     [SerializeField] private TextMeshProUGUI outputNumIncorrectRecipes;
     [SerializeField] private TextMeshProUGUI outputNumHoursPlayed;
+    [SerializeField] private Button homeButton;
+
+    private void Awake()
+    {
+        homeButton.onClick.AddListener(HomeClick);
+    }
+
 
     public void Update()
     {
@@ -22,4 +30,10 @@ public class StatsUI : MonoBehaviour
             outputNumHoursPlayed.text = StatsManager.GetTotalHoursPlayed().ToString() + " minutes";
         }
     }
+
+    private void HomeClick()
+    {
+        Loader.Load(Loader.Scene.MainMenuScene);
+    }
+
 }
