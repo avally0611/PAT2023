@@ -36,7 +36,7 @@ public class SessionManager : MonoBehaviour
     private void GameManager_OnStateChanged(object sender, System.EventArgs e)
     {
 
-        if (gameManager.IsGameWaitingToStart())
+        if (gameManager.IsCountDownToStartActive())
         {
             startTime = DateTime.Now;
         }

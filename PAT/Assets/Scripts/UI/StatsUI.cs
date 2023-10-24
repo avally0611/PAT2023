@@ -27,7 +27,7 @@ public class StatsUI : MonoBehaviour
             outputHighScore.text = StatsManager.GetHighScore().ToString();
             outputNumRecDelivered.text = StatsManager.GetNumOfRecipesCompleted().ToString();
             outputNumIncorrectRecipes.text = StatsManager.GetNumOfIncorrectRecipes().ToString();
-            outputNumHoursPlayed.text = StatsManager.GetTotalHoursPlayed().ToString() + " minutes";
+            outputNumHoursPlayed.text = StatsManager.GetMinutesPlayed().ToString() + " minutes";
         }
     }
 

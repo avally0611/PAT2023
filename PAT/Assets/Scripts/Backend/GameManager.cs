@@ -121,13 +121,7 @@ public class GameManager : MonoBehaviour
         
     }
 
-    //method used by other classes to see if state is Game waiting to start
-    public bool IsGameWaitingToStart()
-    {
-
-        return state == State.WaitingToStart;
-
-    }
+  
     
     //normalises weird timer number like (0.333) to normal 3,2,1 numbers
     public float GetGamePlayingTimerNormalized()

@@ -67,7 +67,7 @@ public class StatsManager : MonoBehaviour
         return numIncorrectRecipes;
     }
 
-    public static double GetTotalHoursPlayed()
+    public static double GetMinutesPlayed()
     {
         double rounded = Math.Round(totalMinutesPlayed, 0);
         return rounded;
